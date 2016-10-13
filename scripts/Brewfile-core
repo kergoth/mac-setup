@@ -1,0 +1,48 @@
+# Prereqs
+#brew 'mas'
+#mas 'Xcode', id: 497799835
+
+# Taps
+tap 'caskroom/fonts'
+tap 'caskroom/versions'
+tap 'homebrew/binary'
+tap 'homebrew/dupes'
+tap 'homebrew/headonly'
+tap 'homebrew/python'
+tap 'homebrew/versions'
+tap 'monochromegane/pt'
+
+# Essentials
+brew 'dtach'
+brew 'duti'
+brew 'dvtm'
+brew 'git'
+#brew 'mercurial'
+brew 'python3'
+brew 'reattach-to-user-namespace', args: ['with-wrap-pbcopy-and-pbpaste']
+brew 'ssh-copy-id'
+brew 'tag'
+brew 'the_silver_searcher'
+brew 'trash'
+brew 'wget'
+brew 'zsh'
+
+cask 'alfred'
+cask 'bartender'
+cask 'blockblock'
+cask 'iterm2'
+cask 'knockknock'
+cask 'kextviewr'
+cask 'rcdefaultapp'
+cask 'suspicious-package'
+cask 'the-unarchiver'
+
+cask 'qlcolorcode'
+cask 'qlmarkdown'
+cask 'qlprettypatch'
+cask 'qlstephen'
+cask 'quicklook-csv'
+cask 'quicklook-json'
+cask 'webpquicklook'
+
+mas 'PopClip', id: 445189367

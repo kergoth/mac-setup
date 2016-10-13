@@ -1,0 +1,44 @@
+#!/bin/bash
+
+set -euo pipefail
+
+scriptdir="$(cd "$(dirname "$0")" && pwd -P)"
+PATH="${HOMEBREW_PREFIX:-$(brew --prefix 2>/dev/null || echo /usr/local)}/bin:$scriptdir:$PATH"
+
+tmpdir="$PWD/$(mktemp -d "${0##*/}.XXXXXX")"
+trap 'rm -rf "$tmpdir"' EXIT INT TERM
+
+# Apply spotlight privacy fixes
+(
+    cd "$tmpdir"
+    curl -O https://fix-macosx.com/fix-macosx.py
+    /usr/bin/python fix-macosx.py
+)
+
+# Prevent auto-mounting of remote-filesystems by Finder
+duti -vs com.apple.Safari afp
+duti -vs com.apple.Safari ftp
+duti -vs com.apple.Safari nfs
+duti -vs com.apple.Safari smb
+
+# Set your screen to lock as soon as the screensaver starts:
+defaults write com.apple.screensaver askForPassword -int 1
+defaults write com.apple.screensaver askForPasswordDelay -int 0
+
+# Expose hidden files and Library folder in Finder:
+defaults write com.apple.finder AppleShowAllFiles -bool true
+chflags nohidden ~/Library
+
+# Show all filename extensions (so that "Evil.jpg.app" cannot masquerade easily).
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+# Don't default to saving documents to iCloud:
+defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+
+# Disable crash reporter (the dialog which appears after an application crashes and prompts to report the problem to Apple):
+defaults write com.apple.CrashReporter DialogType none
+
+# Disable Bonjour multicast advertisements:
+sudo defaults write /Library/Preferences/com.apple.mDNSResponder.plist NoMulticastAdvertisements -bool YES
+
+setup-apps

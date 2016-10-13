@@ -1,0 +1,9 @@
+# Development
+brew 'autoconf'
+brew 'automake'
+brew 'cmake'
+brew 'gettext'
+brew 'libtool'
+brew 'ninja'
+brew 'pandoc'
+brew 'pkg-config'

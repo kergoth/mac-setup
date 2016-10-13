@@ -1,0 +1,49 @@
+#!/bin/sh
+
+locate_app_by_id () {
+    mdfind -onlyin /Applications "kMDItemContentType == 'com.apple.application-bundle' && kMDItemCFBundleIdentifier == '$*'"
+}
+
+app_installed () {
+    test -n "$(locate_app_by_id "$*")"
+}
+
+duti_all () {
+    if app_installed "$1"; then
+        duti-all "$1"
+    fi
+}
+
+ext_to_uti () {
+    duti -e "$*" | sed -ne 's/^identifier: //p'
+}
+
+
+duti -vs com.googlecode.iterm2 public.unix-executable shell
+duti -vs com.softwareambience.lilyview public.image viewer
+duti -vs com.softwareambience.lilyview com.adobe.photoshop-image viewer
+# Alternative:
+#open -a "Google Chrome" --args --make-default-browser
+duti -vs com.google.Chrome public.html all
+duti -vs com.google.Chrome public.xhtml all
+duti -vs com.google.Chrome http
+duti -vs com.google.Chrome https
+duti -vs com.google.Chrome ftp
+duti -vs org.niltsh.MPlayerX com.apple.quicktime-movie viewer
+duti -vs org.niltsh.MPlayerX public.3gpp viewer
+duti -vs org.niltsh.MPlayerX public.3gpp2 viewer
+duti -vs org.niltsh.MPlayerX public.avi viewer
+duti -vs org.niltsh.MPlayerX public.dv-movie viewer
+duti -vs org.niltsh.MPlayerX public.flc-animation viewer
+duti -vs org.niltsh.MPlayerX public.mpeg viewer
+duti -vs org.niltsh.MPlayerX public.mpeg-4 viewer
+duti -vs com.cocoatech.PathFinder public.folder viewer
+# Opening packages in Suspicious Package ensures that you know what you're
+# installing. There's a button in the app to run Installer.
+duti -vs com.mothersruin.SuspiciousPackageApp com.apple.installer-package-archive viewer
+duti -vs com.mothersruin.SuspiciousPackageApp x-apple-installer-package
+
+# Switch these associations from Archive Utility to The Unarchiver
+duti-all -n "/System/Library/CoreServices/Applications/Archive Utility.app" | \
+    sed 's/com\.apple\.archiveutility/cx\.c3\.theunarchiver/; s/-s/-vs/;' | \
+    tr '\n' '\0' | xargs -0 -n 1 -I"{}" sh -c "{}"

@@ -1,0 +1,58 @@
+#!/bin/bash
+
+set -euo pipefail
+
+scriptdir="$(cd "$(dirname "$0")" && pwd -P)"
+PATH="$scriptdir:$PATH"
+
+usage () {
+    echo >&2 "${0##*/} [options]"
+    echo >&2
+    echo >&2 "Options:"
+    echo >&2
+    echo >&2 "  -x  Install Xcode rather than CLT"
+    exit 2
+}
+
+
+xcode=0
+while getopts xh opt; do
+    case "$opt" in
+        x)
+            xcode=1
+            ;;
+        \?|h)
+            usage
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+# Enable FileVault
+sudo fdesetup enable || true
+
+# Enable Firewall
+sudo defaults write /Library/Preferences/com.apple.alf globalstate -bool true
+
+# Enable Stealth Mode
+sudo defaults write /Library/Preferences/com.apple.alf stealthenabled -bool true
+
+# Avoid captive portal hijacking attacks
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.captive.control Active -bool false
+
+sudo mkdir -p /opt
+sudo chgrp -R admin /usr/local /opt
+sudo find /usr/local /opt -type d -exec chmod g+wXs "{}" \;
+sudo find /usr/local /opt -not -type d -exec chmod g+wX "{}" \;
+
+softwareupdate -ia
+
+if ! xcode-select -p >/dev/null 2>&1; then
+    if [ $xcode -eq 1 ]; then
+        install-xcode
+    else
+        install-clt
+    fi
+fi
+
+install-brew-system "${HOMEBREW_PREFIX:-/opt/homebrew}"

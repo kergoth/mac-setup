@@ -1,0 +1,5 @@
+brew 'dylibbundler'
+brew 'icoutils'
+brew 'innoextract', args: ['HEAD']
+brew 'makeicns'
+cask 'wineskin-winery'

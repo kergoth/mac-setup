@@ -1,0 +1,58 @@
+#!/bin/sh
+
+locate_app () {
+    mdfind "kMDItemContentType == 'com.apple.application-bundle' && kMDItemDisplayName == '${*%.app}'cd"
+}
+
+locate_app_by_id () {
+    mdfind -onlyin /Applications "kMDItemContentType == 'com.apple.application-bundle' && kMDItemCFBundleIdentifier == '$*'"
+}
+
+app_installed () {
+    test -n "$(locate_app_by_id "$*")"
+}
+
+# TODO: see if brew-bundle will automatically install mas for us
+#brew install mas
+
+if [ $# -eq 0 ]; then
+    set -- core
+fi
+
+scriptdir="$(cd "$(dirname "$0")" && pwd -P)"
+PATH="${HOMEBREW_PREFIX:-$(brew --prefix 2>/dev/null || echo /opt/homebrew)}/bin:$scriptdir:$PATH"
+
+# We want to do the rest of the setup even if the bundle setup partially fails,
+# so ignore any error from it at this time.
+for group; do
+    if which install-apps-$group; then
+        install-apps-$group
+    else
+        brew bundle --verbose --file=Brewfile-$group || :
+    fi
+done
+
+# Needed by setup-apps
+brew install duti
+
+# Open these apps so they set up auto-start for themselves
+while read -r bundle_id; do
+    if app_installed "$bundle_id"; then
+        open -gb "$bundle_id"
+    fi
+done <<END
+ch.tripmode.TripMode
+com.agilebits.onepassword4
+com.backup42.desktop
+com.bjango.istatmenus
+com.expandrive.ExpanDrive3
+com.flexibits.fantastical
+com.getdropbox.dropbox
+com.kapeli.dash
+com.pilotmoon.popclip
+com.runningwithcrayons.Alfred-3
+com.surteesstudios.Bartender
+org.herf.Flux
+END
+
+open -ga "WiFi Signal" 2>/dev/null

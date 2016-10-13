@@ -1,0 +1,10 @@
+# Gaming, assuming a steam streaming client approach
+brew 'wakeonlan'
+cask 'steam'
+cask 'xbox360-controller-driver'
+
+# Unused after the switch to streaming
+#cask 'battle-net'
+#cask 'origin'
+#cask 'gog-downloader'
+#cask 'gog-galaxy'

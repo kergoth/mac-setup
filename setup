@@ -1,0 +1,27 @@
+#!/bin/bash
+#
+# Prerequisite: run as an admin user, for sudo access
+#
+# Elements:
+# - Install CLT/Xcode
+# - Install homebrew
+# - Install homebrew formulas
+# - Install apps, with whatever extra steps are needed
+# - Set up & configure apps and associations
+# - Dropbox settings sync / symlinks
+#
+# TODO:
+# - [ ] defaults setup
+# - [ ] Figure out why the BlockBlock kext isn't working with El Capitan
+
+
+set -euo pipefail
+
+scriptdir="$(cd "$(dirname "$0")" && pwd -P)"
+PATH="$scriptdir/scripts:$PATH"
+
+export HOMEBREW_PREFIX="${HOMEBREW_PREFIX:-/opt/homebrew}"
+
+setup-admin "$@"
+install-apps || :
+setup-user
