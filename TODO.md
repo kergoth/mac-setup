@@ -11,12 +11,15 @@
 - Add numerous `defaults` configurations to the setup, both more
   security-related bits and general personal preferences, ideally separating
   the two for easier sharing with others
+- Add bits I prefer to install with language-specific package managers
+  - Add bits I like to install into isolated areas rather than global
 
 Consider / maybe:
 
 - Add cask to extra: malwarebytes anti-malware
 - Drop brew-bundle usage in favor of direct shell scripting, as it's just
   a wrapper, and I keep having to do extra beyond what it can handle anyway
+- brew tap buo/cask-upgrade
 
 For the two-user setup:
 
