@@ -24,4 +24,5 @@ export HOMEBREW_PREFIX="${HOMEBREW_PREFIX:-/opt/homebrew}"
 
 setup-admin "$@"
 install-apps || :
-setup-user
+setup-user || :
+setup-user-extra
