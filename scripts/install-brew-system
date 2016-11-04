@@ -1,15 +1,17 @@
 #!/bin/sh
 
-install-brew "${HOMEBREW_PREFIX:-/opt/homebrew}"
+: ${HOMEBREW_PREFIX:=$(brew --prefix 2>/dev/null || echo /opt/homebrew)}
+
+install-brew "$HOMEBREW_PREFIX"
 
 if [ ! -e /etc/paths.d/homebrew ]; then
-    sudo sh -c "echo '$HOMEBREW_PATH/bin' >/etc/paths.d/homebrew"
+    sudo sh -c "echo '$HOMEBREW_PREFIX/bin' >/etc/paths.d/homebrew"
 fi
 if [ ! -e /etc/manpaths.d/homebrew ]; then
-    sudo sh -c "echo '$HOMEBREW_PATH/share/man' >/etc/manpaths.d/homebrew"
+    sudo sh -c "echo '$HOMEBREW_PREFIX/share/man' >/etc/manpaths.d/homebrew"
 fi
 
-if [ -e "$HOMEBREW_PATH/bin/zsh" ] && ! grep -q "$HOMEBREW_PATH/bin/zsh" /etc/shells; then
-    sudo sh -c "echo '$HOMEBREW_PATH/bin/zsh' >>/etc/shells"
+if [ -e "$HOMEBREW_PREFIX/bin/zsh" ] && ! grep -q "$HOMEBREW_PREFIX/bin/zsh" /etc/shells; then
+    sudo sh -c "echo '$HOMEBREW_PREFIX/bin/zsh' >>/etc/shells"
 fi
 

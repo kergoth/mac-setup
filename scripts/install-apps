@@ -25,10 +25,10 @@ PATH="${HOMEBREW_PREFIX:-$(brew --prefix 2>/dev/null || echo /opt/homebrew)}/bin
 # We want to do the rest of the setup even if the bundle setup partially fails,
 # so ignore any error from it at this time.
 for group; do
-    if which install-apps-$group; then
-        install-apps-$group
+    if [ -e scripts/install-apps-$group ]; then
+        scripts/install-apps-$group
     else
-        brew bundle --verbose --file=Brewfile-$group || :
+        brew bundle --verbose --file=scripts/Brewfile-$group || :
     fi
 done
 
