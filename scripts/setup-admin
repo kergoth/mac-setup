@@ -28,9 +28,6 @@ while getopts xh opt; do
 done
 shift $((OPTIND - 1))
 
-# Enable FileVault
-sudo fdesetup enable || true
-
 # Enable Firewall
 sudo defaults write /Library/Preferences/com.apple.alf globalstate -bool true
 
