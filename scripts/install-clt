@@ -6,7 +6,7 @@ touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
 trap 'rm -f /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress' EXIT INT TERM
 PROD=$(softwareupdate -l |
        grep "\*.*Command Line" |
-       head -n 1 | awk -F"*" '{print $2}' |
+       awk -F"*" '{print $2}' | tail -n 1 |
        sed -e 's/^ *//' |
        tr -d '\n')
 softwareupdate -i "$PROD" --verbose
