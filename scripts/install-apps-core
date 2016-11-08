@@ -19,6 +19,12 @@ esac
 if [ -d /opt/homebrew/Caskroom/blockblock ]; then
     open /opt/homebrew/Caskroom/blockblock/*/BlockBlock_Installer.app 2>/dev/null
 fi
+if [ -d /opt/homebrew/Caskroom/oversight ]; then
+    open /opt/homebrew/Caskroom/oversight/*/OverSight_Installer.app 2>/dev/null
+fi
+if [ -d /opt/homebrew/Caskroom/whatsyoursign ]; then
+    open /opt/homebrew/Caskroom/whatsyoursign/*/WhatsYourSign_Installer.app 2>/dev/null
+fi
 
 # Reload the Quick Look generators list
 qlmanage -r

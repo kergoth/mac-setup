@@ -1,6 +1,3 @@
-- Push my homebrew bits to github, add as a homebrew tap
-- Add OverSight and WhatsYourSign to the core brewfile
-
 - Re-visit https://github.com/kristovatlas/osx-config-check
 - Fix opening of the newly installed apps, as spotlight likely hasn't indexed
   them all - look for the apps directly, instead
