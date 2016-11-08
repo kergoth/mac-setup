@@ -41,6 +41,9 @@ sudo defaults write /Library/Preferences/com.apple.mDNSResponder.plist NoMultica
 # Avoid captive portal hijacking attacks
 sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.captive.control Active -bool false
 
+# Don't show hostname at the login screen
+sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo ""
+
 sudo mkdir -p /opt
 sudo chgrp -R admin /usr/local /opt
 sudo find /usr/local /opt -type d -exec chmod g+wXs "{}" \;
