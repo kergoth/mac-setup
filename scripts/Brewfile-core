@@ -10,7 +10,6 @@ tap 'homebrew/dupes'
 tap 'homebrew/headonly'
 tap 'homebrew/python'
 tap 'homebrew/versions'
-tap 'monochromegane/pt'
 
 # Essentials
 brew 'dtach'
