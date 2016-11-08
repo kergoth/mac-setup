@@ -45,8 +45,6 @@ sudo chgrp -R admin /usr/local /opt
 sudo find /usr/local /opt -type d -exec chmod g+wXs "{}" \;
 sudo find /usr/local /opt -not -type d -exec chmod g+wX "{}" \;
 
-softwareupdate -ia
-
 if ! xcode-select -p >/dev/null 2>&1; then
     if [ $xcode -eq 1 ]; then
         install-xcode
