@@ -13,7 +13,7 @@ trap 'rm -rf "$tmpdir"' EXIT INT TERM
     cd "$tmpdir"
     curl -O https://fix-macosx.com/fix-macosx.py
     /usr/bin/python fix-macosx.py
-)
+) || :
 
 # Prevent auto-mounting of remote-filesystems by Finder
 duti -vs com.apple.Safari afp
