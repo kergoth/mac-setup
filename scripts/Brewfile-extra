@@ -1,5 +1,6 @@
 # Taps
 tap 'homebrew/games'
+tap 'kergoth/misc'
 
 # Script dependencies
 brew 'coreutils'
