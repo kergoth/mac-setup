@@ -52,10 +52,13 @@ sudo sh -c "echo kern.maxfilesperproc=1048576 >>/etc/sysctl.conf"
 sudo sh -c "sort -u /etc/sysctl.conf >/tmp/foo && mv /tmp/foo /etc/sysctl.conf"
 sudo sysctl -w $(cat /etc/sysctl.conf)
 
+# Sane permissions for /opt and /usr/local
 sudo mkdir -p /opt
+sudo chmod g+wXs /opt
+sudo chmod g+wX /opt
 sudo chgrp -R admin /usr/local /opt
-sudo find /usr/local /opt -type d -exec chmod g+wXs "{}" \;
-sudo find /usr/local /opt -not -type d -exec chmod g+wX "{}" \;
+sudo find /usr/local -type d -exec chmod g+wXs "{}" \;
+sudo find /usr/local -not -type d -exec chmod g+wX "{}" \;
 
 if ! xcode-select -p >/dev/null 2>&1; then
     if [ $xcode -eq 1 ]; then
