@@ -16,7 +16,7 @@ gem install --no-user-install --conservative xcode-install
 osx_version="$(sw_vers -productVersion)"
 case "$osx_version" in
     # These reflect the minimum OS X version requirements from the Xcode wiki page
-    10.12)
+    10.12*)
         xcode_version=8.1
         ;;
     10.11|10.11.[1234])
