@@ -1,16 +1,15 @@
-- Create casks and add to core: oversight, whatsyoursign
-  https://bitbucket.org/objective-see/deploy/downloads
-- Split out FileVault enable, so it can be left off for VMs
+- Push my homebrew bits to github, add as a homebrew tap
+- Add OverSight and WhatsYourSign to the core brewfile
+
+- Re-visit https://github.com/kristovatlas/osx-config-check
 - Fix opening of the newly installed apps, as spotlight likely hasn't indexed
   them all - look for the apps directly, instead
-- Certain mas apps can't be installed until I login, but I can't split out the
-  bits that do from those that don't without ending up with numerous
-  Brewfiles. Might just leave it as is, and if I forget to sign in, and want
-  to on that machine, I'll do so and re-run install-apps.
-- Re-visit https://github.com/kristovatlas/osx-config-check
 - Add numerous `defaults` configurations to the setup, both more
   security-related bits and general personal preferences, ideally separating
   the two for easier sharing with others
+    - Change default open with behavior in Path Finder (text files, terminal)
+    - Finder: show path bar, status bar
+
 - Add bits I prefer to install with language-specific package managers
   - Add bits I like to install into isolated areas rather than global
 
@@ -20,6 +19,11 @@ Consider / maybe:
 - Drop brew-bundle usage in favor of direct shell scripting, as it's just
   a wrapper, and I keep having to do extra beyond what it can handle anyway
 - brew tap buo/cask-upgrade
+
+- Certain mas apps can't be installed until I login, but I can't split out the
+  bits that do from those that don't without ending up with numerous
+  Brewfiles. Might just leave it as is, and if I forget to sign in, and want
+  to on that machine, I'll do so and re-run install-apps.
 
 For the two-user setup:
 
