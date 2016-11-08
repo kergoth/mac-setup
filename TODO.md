@@ -18,7 +18,6 @@ Consider / maybe:
 - Add cask to extra: malwarebytes anti-malware
 - Drop brew-bundle usage in favor of direct shell scripting, as it's just
   a wrapper, and I keep having to do extra beyond what it can handle anyway
-- brew tap buo/cask-upgrade
 
 - Certain mas apps can't be installed until I login, but I can't split out the
   bits that do from those that don't without ending up with numerous

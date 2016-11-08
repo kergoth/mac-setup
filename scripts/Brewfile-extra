@@ -1,4 +1,5 @@
 # Taps
+tap 'buo/cask-upgrade'
 tap 'homebrew/games'
 tap 'kergoth/misc'
 
