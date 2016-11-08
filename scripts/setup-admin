@@ -34,6 +34,9 @@ sudo defaults write /Library/Preferences/com.apple.alf globalstate -bool true
 # Enable Stealth Mode
 sudo defaults write /Library/Preferences/com.apple.alf stealthenabled -bool true
 
+# Disable Bonjour multicast advertisements:
+sudo defaults write /Library/Preferences/com.apple.mDNSResponder.plist NoMulticastAdvertisements -bool YES
+
 # Avoid captive portal hijacking attacks
 sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.captive.control Active -bool false
 

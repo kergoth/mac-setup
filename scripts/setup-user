@@ -38,7 +38,4 @@ defaults write -g NSDocumentSaveNewDocumentsToCloud -bool false
 # Disable crash reporter (the dialog which appears after an application crashes and prompts to report the problem to Apple):
 defaults write com.apple.CrashReporter DialogType none
 
-# Disable Bonjour multicast advertisements:
-sudo defaults write /Library/Preferences/com.apple.mDNSResponder.plist NoMulticastAdvertisements -bool YES
-
 setup-apps
