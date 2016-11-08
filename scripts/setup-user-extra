@@ -5,9 +5,8 @@
 
 : ${HOMEBREW_PREFIX:=$(brew --prefix 2>/dev/null || echo /usr/local)}
 
-# Dock on the left, autohide
-defaults write com.apple.dock autohide 1
-defaults write com.apple.dock orientation left
+# Autohide
+defaults write com.apple.dock autohide -bool true
 defaults write com.apple.dock tilesize 45
 
 # Hide desktop icons completely
