@@ -42,4 +42,40 @@ defaults write com.apple.CrashReporter DialogType none
 defaults write ~/Library/Preferences/com.apple.alf allowsignedenabled -bool false
 defaults write ~/Library/Preferences/com.apple.alf globalstate -bool true
 
+# Expand the save dialog by default in all applications
+defaults write -g NSNavPanelExpandedStateForSaveMode -bool true
+
+# Disable press-and-hold for keys in favor of key repeat
+defaults write -g ApplePressAndHoldEnabled -bool false
+
+# Use AirDrop over every interface
+defaults write com.apple.NetworkBrowser BrowseAllInterfaces 1
+
+# Stop full names from copying with email addresses in Mail.app
+defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
+
+# Always open everything in Finder's list view
+defaults write com.apple.finder FXPreferredViewStyle Nlsv
+
+# Enable quit menu item for Finder
+defaults write com.apple.finder QuitMenuItem -bool true
+
+# Enable text selection in quick look windows
+defaults write com.apple.finder QLEnableTextSelection -bool true
+
+# Remove autohide dock delay
+defaults write com.apple.dock autohide-delay -float 0
+
+# Speed up mission control animations
+defaults write com.apple.dock expose-animation-duration -float 0.12
+
+# Make hidden dock icons translucent
+defaults write com.apple.dock showhidden -bool true
+
+# Half-stars are great
+defaults write com.apple.iTunes allow-half-stars -bool true
+
+# Kill Skype's splash screen
+defaults write com.skype.skype SKShowSplash NO
+
 setup-apps
