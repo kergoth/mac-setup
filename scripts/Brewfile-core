@@ -10,6 +10,7 @@ tap 'homebrew/dupes'
 tap 'homebrew/headonly'
 tap 'homebrew/python'
 tap 'homebrew/versions'
+tap 'kergoth/misc'
 
 # Essentials
 brew 'dtach'
