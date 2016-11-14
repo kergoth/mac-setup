@@ -1,6 +1,3 @@
-- Figure out why 'mas' is acting up. It took a few attempts before it managed
-  to successfully sign in, then it hung trying to install PopClip
-
 - Re-visit https://github.com/kristovatlas/osx-config-check
 - Fix opening of the newly installed apps, as spotlight likely hasn't indexed
   them all - look for the apps directly, instead
