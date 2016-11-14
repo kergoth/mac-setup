@@ -26,6 +26,7 @@ duti -vs com.softwareambience.lilyview com.adobe.photoshop-image viewer
 #open -a "Google Chrome" --args --make-default-browser
 duti -vs com.google.Chrome public.html all
 duti -vs com.google.Chrome public.xhtml all
+duti -vs com.google.Chrome com.apple.web-internet-location all
 duti -vs com.google.Chrome http
 duti -vs com.google.Chrome https
 duti -vs com.google.Chrome ftp
