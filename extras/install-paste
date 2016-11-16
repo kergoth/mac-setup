@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -e
+
+if mas account >/dev/null 2>&1 || mas signin kergoth@mac.com; then
+    mas install 967805235
+fi
+
+if [ -e /Applications/Paste.app/Contents/_MASReceipt ]; then
+    tempdir="$(mktemp -dt "${0##*/}.XXXXXX")"
+    trap 'rm -rf "$tempdir"' EXIT INT TERM
+    cd "$tempdir"
+    curl -sSfLo Paste_Helper.app.zip http://pasteapp.me/helper/download
+    # open -gjnW -a "Archive Utility" Paste_Helper.app.zip
+    open -gjnW -a /System/Library/CoreServices/Applications/Archive\ Utility.app Paste_Helper.app.zip
+    # /System/Library/CoreServices/Applications/Archive\ Utility.app/Contents/MacOS/Archive\ Utility Paste_Helper.app.zip
+    open -W Paste\ Helper.app
+fi
