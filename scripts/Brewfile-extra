@@ -9,6 +9,7 @@ brew 'gawk'
 brew 'gnu-sed'
 # rsync 3.x rather than the old 2.x
 brew 'homebrew/dupes/rsync'
+brew 'httpie'
 brew 'jq'
 brew 'parallel'
 brew 'patchutils'
