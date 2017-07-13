@@ -1,4 +1,5 @@
 - Re-visit https://github.com/kristovatlas/osx-config-check
+- https://gist.github.com/johan/6108880
 - Fix opening of the newly installed apps, as spotlight likely hasn't indexed
   them all - look for the apps directly, instead
 - Add numerous `defaults` configurations to the setup, both more
