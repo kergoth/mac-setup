@@ -6,7 +6,7 @@ if mas account >/dev/null 2>&1 || mas signin kergoth@mac.com; then
     mas install 967805235
 fi
 
-if [ -e /Applications/Paste.app/Contents/_MASReceipt ]; then
+if ! [ -e "$HOME/Library/Application Support/Paste Helper" ] && [ -e /Applications/Paste.app/Contents/_MASReceipt ]; then
     tempdir="$(mktemp -dt "${0##*/}.XXXXXX")"
     trap 'rm -rf "$tempdir"' EXIT INT TERM
     cd "$tempdir"
