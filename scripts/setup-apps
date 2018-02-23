@@ -38,7 +38,9 @@ duti -vs org.videolan.vlc public.dv-movie viewer
 duti -vs org.videolan.vlc public.flc-animation viewer
 duti -vs org.videolan.vlc public.mpeg viewer
 duti -vs org.videolan.vlc public.mpeg-4 viewer
-duti -vs com.cocoatech.PathFinder public.folder viewer
+if [ -e /Applications/Path\ Finder.app ]; then
+    duti -vs com.cocoatech.PathFinder public.folder viewer
+fi
 duti -vs com.amazon.SendToKindle .mobi viewer
 duti -vs com.amazon.SendToKindle .azw viewer
 # Opening packages in Suspicious Package ensures that you know what you're
