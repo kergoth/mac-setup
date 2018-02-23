@@ -1,3 +1,15 @@
+Updates:
+
+- Kap
+- Unplugged
+- Magnet
+- Captin
+- coconutBattery?
+- Firefox as default
+- Oversight
+- Docker
+- Migrate away from Wunderlist and uninstall it
+
 - Re-visit https://github.com/kristovatlas/osx-config-check
 - https://gist.github.com/johan/6108880
 - Fix opening of the newly installed apps, as spotlight likely hasn't indexed
@@ -5,8 +17,8 @@
 - Add numerous `defaults` configurations to the setup, both more
   security-related bits and general personal preferences, ideally separating
   the two for easier sharing with others
-    - Change default open with behavior in Path Finder (text files, terminal)
-    - Finder: show path bar, status bar
+  - Change default open with behavior in Path Finder (text files, terminal)
+  - Finder: show path bar, status bar
 
 - Add bits I prefer to install with language-specific package managers
   - Add bits I like to install into isolated areas rather than global
