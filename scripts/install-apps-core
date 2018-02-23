@@ -7,6 +7,8 @@ PATH="${HOMEBREW_PREFIX:-$(brew --prefix 2>/dev/null || echo /opt/homebrew)}/bin
 
 brew bundle --verbose --file=$scriptdir/Brewfile-core
 
+install-python
+
 # The bug ostiarius fixes in El Capitan was fixed by Apple in macOS Sierra
 osx_version="$(sw_vers -productVersion)"
 case "$osx_version" in
