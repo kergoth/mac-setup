@@ -4,9 +4,7 @@ Updates:
 - Unplugged
 - Magnet
 - Captin
-- coconutBattery?
 - Firefox as default
-- Oversight
 - Docker
 - Migrate away from Wunderlist and uninstall it
 
