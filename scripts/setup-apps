@@ -22,14 +22,12 @@ ext_to_uti () {
 duti -vs com.googlecode.iterm2 public.unix-executable shell
 duti -vs com.softwareambience.lilyview public.image viewer
 duti -vs com.softwareambience.lilyview com.adobe.photoshop-image viewer
-# Alternative:
-#open -a "Google Chrome" --args --make-default-browser
-duti -vs com.google.Chrome public.html all
-duti -vs com.google.Chrome public.xhtml all
-duti -vs com.google.Chrome com.apple.web-internet-location all
-duti -vs com.google.Chrome http
-duti -vs com.google.Chrome https
-duti -vs com.google.Chrome ftp
+duti -vs org.mozilla.firefox public.html all
+duti -vs org.mozilla.firefox public.xhtml all
+duti -vs org.mozilla.firefox com.apple.web-internet-location all
+duti -vs org.mozilla.firefox http
+duti -vs org.mozilla.firefox https
+duti -vs org.mozilla.firefox ftp
 duti -vs org.videolan.vlc com.apple.quicktime-movie viewer
 duti -vs org.videolan.vlc public.3gpp viewer
 duti -vs org.videolan.vlc public.3gpp2 viewer
@@ -38,7 +36,7 @@ duti -vs org.videolan.vlc public.dv-movie viewer
 duti -vs org.videolan.vlc public.flc-animation viewer
 duti -vs org.videolan.vlc public.mpeg viewer
 duti -vs org.videolan.vlc public.mpeg-4 viewer
-if [ -e /Applications/Path\ Finder.app ]; then
+if app_installed com.cocoatech.PathFinder; then
     duti -vs com.cocoatech.PathFinder public.folder viewer
 fi
 duti -vs com.amazon.SendToKindle .mobi viewer
