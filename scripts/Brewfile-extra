@@ -17,6 +17,10 @@ brew 'pup'
 brew 'pv'
 brew 'terminal-notifier'
 
+# For youtube-dl
+brew 'ffmpeg'
+brew 'rtmpdump'
+
 # Extras
 brew 'dfc'
 brew 'htop-osx'
@@ -30,6 +34,7 @@ cask 'crashplan'
 cask 'dropbox'
 cask 'expandrive'
 cask 'fantastical1'
+cask 'firefox'
 cask 'flux'
 cask 'google-chrome'
 cask 'google-photos-backup'
@@ -55,7 +60,3 @@ mas 'Textual', id: 896450579
 mas 'WiFi Explorer', id: 494803304
 mas 'WiFi Signal', id: 525912054
 mas 'Wunderlist', id: 410628904
-
-# For youtube-dl
-brew 'ffmpeg'
-brew 'rtmpdump'
