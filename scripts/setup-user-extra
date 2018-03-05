@@ -3,8 +3,6 @@
 # setup-admin/setup-user are what I'd consider reasonable defaults for anyone
 # rather than my personal preferences.
 
-: ${HOMEBREW_PREFIX:=$(brew --prefix 2>/dev/null || echo /usr/local)}
-
 # Autohide
 defaults write com.apple.dock autohide -bool true
 defaults write com.apple.dock tilesize 45
@@ -16,6 +14,7 @@ defaults write com.apple.finder CreateDesktop -bool false
 defaults write com.apple.dashboard mcx-disabled -bool true
 
 # Zsh is my preferred shell
+export HOMEBREW_PREFIX=/opt/homebrew
 if [ -e "$HOMEBREW_PREFIX/bin/zsh" ] && grep -qx "$HOMEBREW_PREFIX/bin/zsh" /etc/shells; then
     chsh -s "$HOMEBREW_PREFIX/bin/zsh"
 fi

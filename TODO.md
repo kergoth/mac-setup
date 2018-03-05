@@ -1,12 +1,7 @@
-Updates:
+- RCDefaultApp
+- EnvPane
 
-- Kap
-- Unplugged
-- Magnet
-- Captin
-- Firefox as default
-- Docker
-- Migrate away from Wunderlist and uninstall it
+Updates:
 
 - Re-visit https://github.com/kristovatlas/osx-config-check
 - https://gist.github.com/johan/6108880

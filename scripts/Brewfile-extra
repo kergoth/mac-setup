@@ -1,14 +1,10 @@
-# Taps
-tap 'buo/cask-upgrade'
-tap 'homebrew/games'
-
 # Script dependencies
 brew 'coreutils'
 brew 'findutils'
 brew 'gawk'
 brew 'gnu-sed'
 # rsync 3.x rather than the old 2.x
-brew 'homebrew/dupes/rsync'
+brew 'rsync'
 brew 'httpie'
 brew 'jq'
 brew 'parallel'
@@ -29,34 +25,3 @@ brew 'go'
 brew 'node'
 brew 'shellcheck'
 brew 'sshuttle'
-cask '1password'
-cask 'crashplan'
-cask 'dropbox'
-cask 'expandrive'
-cask 'fantastical1'
-cask 'firefox'
-cask 'flux'
-cask 'google-chrome'
-cask 'google-photos-backup'
-cask 'istat-menus'
-cask 'keepingyouawake'
-cask 'launchcontrol'
-cask 'macvim'
-cask 'vlc'
-cask 'nvalt'
-cask 'omnioutliner'
-cask 'parallels-desktop'
-cask 'send-to-kindle'
-cask 'taskpaper'
-cask 'tripmode'
-cask 'vmware-fusion7'
-mas 'Dash', id: 458034879
-mas 'LilyView', id: 529490330
-mas 'Microsoft Remote Desktop', id: 715768417
-mas 'Pages', id: 409201541
-mas 'Pixelmator', id: 407963104
-mas 'Pocket', id: 568494494
-mas 'Textual 7', id: 1262957439
-mas 'WiFi Explorer', id: 494803304
-mas 'WiFi Signal', id: 525912054
-mas 'Wunderlist', id: 410628904

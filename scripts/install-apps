@@ -31,28 +31,3 @@ for group; do
         brew bundle --verbose --file=scripts/Brewfile-$group || :
     fi
 done
-
-# Needed by setup-apps
-brew install duti
-
-# Open these apps so they set up auto-start for themselves
-while read -r bundle_id; do
-    if app_installed "$bundle_id"; then
-        open -gb "$bundle_id"
-    fi
-done <<END
-ch.tripmode.TripMode
-com.agilebits.onepassword4
-com.backup42.desktop
-com.bjango.istatmenus
-com.expandrive.ExpanDrive3
-com.flexibits.fantastical
-com.getdropbox.dropbox
-com.kapeli.dash
-com.pilotmoon.popclip
-com.runningwithcrayons.Alfred-3
-com.surteesstudios.Bartender
-org.herf.Flux
-END
-
-open -ga "WiFi Signal" 2>/dev/null

@@ -1,0 +1,29 @@
+#!/bin/sh
+
+if [ $# -eq 0 ]; then
+    set -- core
+fi
+
+export HOMEBREW_PREFIX=/opt/homebrew
+PATH="$HOMEBREW_PREFIX/bin:$PATH"
+
+scriptsdir="$(cd "$(dirname "$0")" && pwd -P)"
+for group; do
+    brew bundle --verbose "--file=$scriptsdir/Caskfile-$group"
+done
+
+install_send_to_kindle () {
+    (
+        tmpdir="$(mktemp -d -t "send-to-kindle.XXXXXX")" || return 1
+        trap 'rm -rf "$tmpdir"' EXIT INT TERM
+        cd "$tmpdir" || return 2
+        curl -o installer.pkg https://s3.amazonaws.com/sendtokindle/SendToKindleForMac-installer.pkg
+        sudo -E -- /usr/sbin/installer -pkg installer.pkg -target / -allowUntrusted
+    )
+}
+
+case " $* " in
+    \ extra\ )
+        install_send_to_kindle
+        ;;
+esac

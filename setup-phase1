@@ -2,8 +2,14 @@
 
 set -euo pipefail
 
+if ! groups | grep -qw admin; then
+    echo >&2 "Error: must run phase1 as an admin user"
+    exit 1
+fi
 scriptdir="$(cd "$(dirname "$0")" && pwd -P)"
-PATH="$scriptdir:$PATH"
+PATH="$scriptdir:$scriptdir/scripts:/opt/homebrew/bin:$PATH"
+
+unset HOMEBREW_AUTO_UPDATE
 
 usage () {
     echo >&2 "${0##*/} [options]"
@@ -52,14 +58,11 @@ sudo sh -c "echo kern.maxfilesperproc=1048576 >>/etc/sysctl.conf"
 sudo sh -c "sort -u /etc/sysctl.conf >/tmp/foo && mv /tmp/foo /etc/sysctl.conf"
 sudo sysctl -w $(cat /etc/sysctl.conf)
 
-# Sane permissions for /opt and /usr/local
+# Sane permissions for /opt
 sudo mkdir -p /opt
 sudo chmod g+wXs /opt
 sudo chmod g+wX /opt
-sudo chgrp -R admin /usr/local || :
 sudo chgrp -R admin /opt
-sudo find /usr/local -type d -exec chmod g+wXs "{}" \;
-sudo find /usr/local -not -type d -exec chmod g+wX "{}" \;
 
 if ! xcode-select -p >/dev/null 2>&1; then
     if [ $xcode -eq 1 ]; then
@@ -69,6 +72,40 @@ if ! xcode-select -p >/dev/null 2>&1; then
     fi
 fi
 
-if [ ! -e "${HOMEBREW_PREFIX:-/opt/homebrew}/bin/brew" ]; then
-    install-brew-system "${HOMEBREW_PREFIX:-/opt/homebrew}"
+export HOMEBREW_PREFIX=/opt/homebrew
+PATH="$HOMEBREW_PREFIX/bin:$PATH"
+
+# Install system homebrew
+if [ ! -e /opt/homebrew/bin/brew ]; then
+    sudo chgrp admin /opt
+    sudo chmod g+ws /opt
+    install-brew /opt/homebrew
 fi
+
+# Install zsh into system homebrew
+# Work around checksum mismatch issue with 5.4.2 tarballs on sourceforge
+sed -ibak -e 's#https://downloads.sourceforge.net/project/zsh/.*/5.4.2/#http://www.zsh.org/pub/#g' /opt/homebrew/Library/Taps/homebrew/homebrew-core/Formula/zsh.rb && rm -f /opt/homebrew/Library/Taps/homebrew/homebrew-core/Formula/zsh.rbbak
+brew install zsh
+
+# Add zsh to /etc/shells
+# Add system homebrew bin & man dirs to appropriate paths.d
+install-brew-system /opt/homebrew
+
+# Install apps from casks
+install-casks "$@"
+
+# The bug ostiarius fixes in El Capitan was fixed by Apple in macOS Sierra
+osx_version="$(sw_vers -productVersion)"
+case "$osx_version" in
+    10.11*)
+        brew cask install ostiarius
+        ;;
+esac
+
+# Extra installers
+if [ -d /opt/homebrew/Caskroom/whatsyoursign ]; then
+    open /opt/homebrew/Caskroom/whatsyoursign/*/WhatsYourSign_Installer.app 2>/dev/null
+fi
+
+# Reload the Quick Look generators list
+qlmanage -r

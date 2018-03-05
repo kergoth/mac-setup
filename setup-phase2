@@ -1,0 +1,99 @@
+#!/bin/bash
+
+set -euo pipefail
+
+locate_app () {
+    mdfind "kMDItemContentType == 'com.apple.application-bundle' && kMDItemDisplayName == '${*%.app}'cd"
+}
+
+locate_app_by_id () {
+    mdfind -onlyin /Applications "kMDItemContentType == 'com.apple.application-bundle' && kMDItemCFBundleIdentifier == '$*'"
+}
+
+app_installed () {
+    test -n "$(locate_app_by_id "$*")"
+}
+
+if groups | grep -qw admin; then
+    echo >&2 "Warning: running as admin user"
+    exit 1
+fi
+setupdir="$(cd "$(dirname "$0")" && pwd -P)"
+PATH="$setupdir:$setupdir/scripts:/opt/homebrew/bin:$PATH"
+
+unset HOMEBREW_AUTO_UPDATE
+
+if [ $# -eq 0 ]; then
+    set -- core
+fi
+
+# Install user shared homebrew
+if [ ! -e /Users/Shared/homebrew/bin/brew ]; then
+    install-brew /Users/Shared/homebrew
+    chgrp -R everyone /Users/Shared/homebrew
+    find /Users/Shared/homebrew -type d -exec chmod g+wXs "{}" \;
+    find /Users/Shared/homebrew -not -type d -exec chmod g+wX "{}" \;
+fi
+PATH=/Users/Shared/homebrew/bin:$PATH
+
+# Install homebrew tools
+install-apps "$@"
+
+# Install pythons with pyenv
+install-python
+
+# App Store apps
+install-mas "$@"
+
+if ! [ -e "$HOME/Library/Application Support/Paste Helper" ] && [ -e /Applications/Paste.app/Contents/_MASReceipt ]; then
+    (
+        tempdir="$(mktemp -dt "${0##*/}.XXXXXX")" || return 1
+        trap 'rm -rf "$tempdir"' EXIT INT TERM
+        cd "$tempdir" || return 2
+        curl -sSfLo Paste_Helper.app.zip http://pasteapp.me/helper/download
+        # open -gjnW -a "Archive Utility" Paste_Helper.app.zip
+        open -gjnW -a /System/Library/CoreServices/Applications/Archive\ Utility.app Paste_Helper.app.zip
+        # /System/Library/CoreServices/Applications/Archive\ Utility.app/Contents/MacOS/Archive\ Utility Paste_Helper.app.zip
+        open -W Paste\ Helper.app
+    )
+fi
+
+# Configure user and app settings
+brew install duti # Needed by setup-apps to set up associations
+setup-user
+setup-user-extra
+
+# Open these apps so they set up auto-start for themselves
+while read -r bundle_id; do
+    if app_installed "$bundle_id"; then
+        open -gb "$bundle_id"
+    fi
+done <<END
+ch.tripmode.TripMode
+com.agilebits.onepassword4
+com.backup42.desktop
+com.bjango.istatmenus
+com.expandrive.ExpanDrive3
+com.flexibits.fantastical
+com.getdropbox.dropbox
+com.pilotmoon.popclip
+com.runningwithcrayons.Alfred-3
+com.surteesstudios.Bartender
+org.herf.Flux
+com.wulkano.kap
+com.100hps.captin
+com.crowdcafe.windowmagnet
+com.briksoftware.unplugged
+net.freemacsoft.AppCleaner
+com.wiheads.paste
+com.docker.docker
+END
+
+if test -n "$(locate_app "WiFi Signal")"; then
+    open -ga "WiFi Signal" 2>/dev/null
+fi
+
+# Reload the Quick Look generators list
+qlmanage -r
+
+# pip install, pip3 install, cargo install, etc of other tools

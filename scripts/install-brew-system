@@ -1,6 +1,6 @@
 #!/bin/sh
 
-: ${HOMEBREW_PREFIX:=$(brew --prefix 2>/dev/null || echo /opt/homebrew)}
+HOMEBREW_PREFIX="${1:-${HOMEBREW_PREFIX:-$(brew --prefix 2>/dev/null || echo /opt/homebrew)}}"
 
 install-brew "$HOMEBREW_PREFIX"
 
@@ -14,4 +14,3 @@ fi
 if [ -e "$HOMEBREW_PREFIX/bin/zsh" ] && ! grep -q "$HOMEBREW_PREFIX/bin/zsh" /etc/shells; then
     sudo sh -c "echo '$HOMEBREW_PREFIX/bin/zsh' >>/etc/shells"
 fi
-

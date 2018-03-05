@@ -2,8 +2,10 @@
 
 set -e
 
-if mas account >/dev/null 2>&1 || mas signin kergoth@mac.com; then
-    mas install 967805235
+if ! [ -e /Applications/Paste.app/Contents/_MASReceipt ]; then
+    if mas account >/dev/null 2>&1 || mas signin kergoth@mac.com; then
+        mas install 967805235
+    fi
 fi
 
 if ! [ -e "$HOME/Library/Application Support/Paste Helper" ] && [ -e /Applications/Paste.app/Contents/_MASReceipt ]; then

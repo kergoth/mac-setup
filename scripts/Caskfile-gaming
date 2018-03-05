@@ -1,0 +1,6 @@
+cask 'steam'
+cask 'xbox360-controller-driver'
+#cask 'battle-net'
+#cask 'origin'
+#cask 'gog-downloader'
+#cask 'gog-galaxy'
