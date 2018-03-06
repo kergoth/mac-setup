@@ -87,6 +87,7 @@ com.briksoftware.unplugged
 net.freemacsoft.AppCleaner
 com.wiheads.paste
 com.docker.docker
+com.aptonic.Dropzone3
 END
 
 if test -n "$(locate_app "WiFi Signal")"; then
