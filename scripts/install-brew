@@ -3,12 +3,13 @@
 set -eu
 
 usage () {
-    echo >&2 "${0##*/} [-h|-s] INSTALL_PATH"
+    echo >&2 "${0##*/} [-h|-s|-r INSTALL_REPO_PATH] INSTALL_PATH"
     echo >&2
     echo >&2 "Install homebrew to the specified INSTALL_PATH"
     echo >&2
     echo >&2 "Options:"
     echo >&2
+    echo >&2 "  -r INSTALL_REPO_PATH Destination of the hoembrew repo when using -s. Default: INSTALL_PATH/homebrew"
     echo >&2 "  -s          Separate the prefix and repo."
     echo >&2 "  -h          Show this help."
     exit 2
