@@ -1,4 +1,4 @@
-- RCDefaultApp
+- Missing brew installs: youtube-dl, wakeonlan, sshuttle
 - EnvPane
 
 Updates:

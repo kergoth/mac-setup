@@ -4,9 +4,6 @@ if [ $# -eq 0 ]; then
     set -- core
 fi
 
-export HOMEBREW_PREFIX=/opt/homebrew
-PATH="$HOMEBREW_PREFIX/bin:$PATH"
-
 scriptsdir="$(cd "$(dirname "$0")" && pwd -P)"
 for group; do
     brew bundle --verbose "--file=$scriptsdir/Caskfile-$group"

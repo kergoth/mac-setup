@@ -7,11 +7,11 @@ if ! groups | grep -qw admin; then
     exit 1
 fi
 scriptdir="$(cd "$(dirname "$0")" && pwd -P)"
-PATH="$scriptdir:$scriptdir/scripts:/opt/homebrew/bin:$PATH"
+PATH="$scriptdir:$scriptdir/scripts:$PATH"
 
 unset HOMEBREW_AUTO_UPDATE
 
-usage () {
+usage() {
     echo >&2 "${0##*/} [options]"
     echo >&2
     echo >&2 "Options:"
@@ -20,14 +20,13 @@ usage () {
     exit 2
 }
 
-
 xcode=0
 while getopts xh opt; do
     case "$opt" in
         x)
             xcode=1
             ;;
-        \?|h)
+        \? | h)
             usage
             ;;
     esac
@@ -62,7 +61,7 @@ sudo sysctl -w $(cat /etc/sysctl.conf)
 sudo mkdir -p /opt
 sudo chmod g+wXs /opt
 sudo chmod g+wX /opt
-sudo chgrp -R admin /opt
+# sudo chgrp -R admin /opt
 
 if ! xcode-select -p >/dev/null 2>&1; then
     if [ $xcode -eq 1 ]; then
@@ -72,24 +71,24 @@ if ! xcode-select -p >/dev/null 2>&1; then
     fi
 fi
 
-export HOMEBREW_PREFIX=/opt/homebrew
+export HOMEBREW_PREFIX="/opt/homebrew"
 PATH="$HOMEBREW_PREFIX/bin:$PATH"
 
 # Install system homebrew
-if [ ! -e /opt/homebrew/bin/brew ]; then
+if [ ! -e $HOMEBREW_PREFIX/bin/brew ]; then
     sudo chgrp admin /opt
     sudo chmod g+ws /opt
-    install-brew /opt/homebrew
+    install-brew $HOMEBREW_PREFIX
 fi
 
 # Install zsh into system homebrew
 # Work around checksum mismatch issue with 5.4.2 tarballs on sourceforge
-sed -ibak -e 's#https://downloads.sourceforge.net/project/zsh/.*/5.4.2/#http://www.zsh.org/pub/#g' /opt/homebrew/Library/Taps/homebrew/homebrew-core/Formula/zsh.rb && rm -f /opt/homebrew/Library/Taps/homebrew/homebrew-core/Formula/zsh.rbbak
+sed -ibak -e 's#https://downloads.sourceforge.net/project/zsh/.*/5.4.2/#http://www.zsh.org/pub/#g' $HOMEBREW_PREFIX/Library/Taps/homebrew/homebrew-core/Formula/zsh.rb && rm -f $HOMEBREW_PREFIX/Library/Taps/homebrew/homebrew-core/Formula/zsh.rbbak
 brew install zsh
 
 # Add zsh to /etc/shells
 # Add system homebrew bin & man dirs to appropriate paths.d
-install-brew-system /opt/homebrew
+install-brew-system $HOMEBREW_PREFIX
 
 # Install apps from casks
 install-casks "$@"
@@ -103,8 +102,8 @@ case "$osx_version" in
 esac
 
 # Extra installers
-if [ -d /opt/homebrew/Caskroom/whatsyoursign ]; then
-    open /opt/homebrew/Caskroom/whatsyoursign/*/WhatsYourSign_Installer.app 2>/dev/null
+if [ -d $HOMEBREW_PREFIX/Caskroom/whatsyoursign ]; then
+    open $HOMEBREW_PREFIX/Caskroom/whatsyoursign/*/WhatsYourSign_Installer.app 2>/dev/null
 fi
 
 # Reload the Quick Look generators list

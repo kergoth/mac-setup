@@ -16,10 +16,9 @@ app_installed () {
 
 if groups | grep -qw admin; then
     echo >&2 "Warning: running as admin user"
-    exit 1
 fi
 setupdir="$(cd "$(dirname "$0")" && pwd -P)"
-PATH="$setupdir:$setupdir/scripts:/opt/homebrew/bin:$PATH"
+PATH="$setupdir:$setupdir/scripts:$PATH"
 
 unset HOMEBREW_AUTO_UPDATE
 
@@ -27,14 +26,17 @@ if [ $# -eq 0 ]; then
     set -- core
 fi
 
+export HOMEBREW_PREFIX="/opt/homebrew"
+PATH="$HOMEBREW_PREFIX/bin:$PATH"
+
 # Install user shared homebrew
-if [ ! -e /Users/Shared/homebrew/bin/brew ]; then
-    install-brew /Users/Shared/homebrew
-    chgrp -R everyone /Users/Shared/homebrew
-    find /Users/Shared/homebrew -type d -exec chmod g+wXs "{}" \;
-    find /Users/Shared/homebrew -not -type d -exec chmod g+wX "{}" \;
+if [ ! -e $HOMEBREW_PREFIX/bin/brew ]; then
+    install-brew $HOMEBREW_PREFIX
+    chgrp -R everyone $HOMEBREW_PREFIX
+    find $HOMEBREW_PREFIX -type d -exec chmod g+wXs "{}" \;
+    find $HOMEBREW_PREFIX -not -type d -exec chmod g+wX "{}" \;
 fi
-PATH=/Users/Shared/homebrew/bin:$PATH
+PATH=$HOMEBREW_PREFIX/bin:$PATH
 
 # Install homebrew tools
 install-apps "$@"
