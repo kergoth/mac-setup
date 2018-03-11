@@ -5,7 +5,6 @@ brew 'gawk'
 brew 'gnu-sed'
 # rsync 3.x rather than the old 2.x
 brew 'rsync'
-brew 'httpie'
 brew 'jq'
 brew 'parallel'
 brew 'patchutils'
