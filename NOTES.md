@@ -74,5 +74,3 @@ In systems prior to macOS Sierra (10.12), enable the tty_tickets flag in
 started it. To do so, use sudo visudo and add the line Defaults tty_tickets.
 
 Disable Handoff and Bluetooth features, if they aren't necessary.
-
-If you wish, disable Diagnostics & Usage Data.

@@ -1,5 +1,6 @@
 - Missing brew installs: youtube-dl, wakeonlan, sshuttle
-- EnvPane
+- Missing cask installs: EnvPane, Steam, transmission-remote-gui, little-snitch
+- Set default for .torrent to transmission-remote-gui
 
 Updates:
 
