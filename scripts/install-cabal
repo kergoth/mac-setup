@@ -12,12 +12,13 @@ fi
 
 if which stack >/dev/null 2>&1; then
     stack update
+    stack upgrade
     stack setup
+    stack install cabal-install
     GHC="$(stack exec which ghc)"
     if [ -n "$GHC" ]; then
         ln -sfv "$GHC" ~/.local/bin/
     fi
-    stack install cabal-install
 fi
 
 which cabal
