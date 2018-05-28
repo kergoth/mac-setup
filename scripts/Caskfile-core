@@ -1,5 +1,5 @@
-tap 'caskroom/fonts'
-tap 'caskroom/versions'
+tap 'homebrew/cask-fonts'
+tap 'homebrew/cask-versions'
 cask 'alfred'
 cask 'appcleaner'
 cask 'bartender'
