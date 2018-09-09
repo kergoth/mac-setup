@@ -61,6 +61,12 @@ sudo chgrp -R admin /opt
 sudo find /usr/local -type d -exec chmod g+wXs "{}" \;
 sudo find /usr/local -not -type d -exec chmod g+wX "{}" \;
 
+sudo sh -c 'cat >/usr/local/bin/java && chmod +x /usr/local/bin/java' <<END
+#!/bin/sh
+# Stub to kill the java jdk dialog popup
+exit 1
+END
+
 if ! xcode-select -p >/dev/null 2>&1; then
     if [ $xcode -eq 1 ]; then
         install-xcode
