@@ -103,7 +103,7 @@ esac
 
 # Extra installers
 if [ -d $HOMEBREW_PREFIX/Caskroom/whatsyoursign ]; then
-    open $HOMEBREW_PREFIX/Caskroom/whatsyoursign/*/WhatsYourSign_Installer.app 2>/dev/null
+    open $HOMEBREW_PREFIX/Caskroom/whatsyoursign/*/WhatsYourSign\ Installer.app 2>/dev/null
 fi
 
 # Reload the Quick Look generators list
