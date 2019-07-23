@@ -1,7 +1,6 @@
 # Prereqs
 
 # Taps
-tap 'homebrew/headonly'
 tap 'kergoth/misc'
 
 # Essentials
@@ -10,7 +9,7 @@ brew 'duti'
 brew 'dvtm-kergoth', args: ['HEAD']
 brew 'git'
 #brew 'mercurial'
-brew 'reattach-to-user-namespace', args: ['with-wrap-pbcopy-and-pbpaste']
+brew 'reattach-to-user-namespace'
 brew 'ssh-copy-id'
 brew 'tag'
 brew 'the_silver_searcher'

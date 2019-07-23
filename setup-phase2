@@ -39,13 +39,10 @@ fi
 PATH=$HOMEBREW_PREFIX/bin:$PATH
 
 # Install homebrew tools
-install-apps "$@"
-
-# Install pythons with pyenv
-install-python
+install-apps "$@" || :
 
 # App Store apps
-install-mas "$@"
+install-mas "$@" || :
 
 if ! [ -e "$HOME/Library/Application Support/Paste Helper" ] && [ -e /Applications/Paste.app/Contents/_MASReceipt ]; then
     (

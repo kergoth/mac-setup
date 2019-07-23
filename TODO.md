@@ -1,3 +1,6 @@
+- Add to casks
+    - homebrew/cask-drivers/synology-drive
+
 - Missing brew installs: youtube-dl, wakeonlan, sshuttle
 - Missing cask installs: EnvPane, Steam, transmission-remote-gui, little-snitch
 - Set default for .torrent to transmission-remote-gui
