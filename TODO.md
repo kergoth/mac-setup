@@ -1,3 +1,9 @@
+- /etc/sudoers
+- /etc/hosts
+- /etc/pam.d/sudo
+    - add pam_tid.so
+    - install pam_reattach to /usr/local
+    - add pam_reattach.so
 - Add to casks
     - homebrew/cask-drivers/synology-drive
 
