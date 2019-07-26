@@ -6,6 +6,15 @@
     - add pam_reattach.so
 - Add to casks
     - homebrew/cask-drivers/synology-drive
+    - whatsapp
+- Add to brew
+    - parallel
+    - sshuttle
+    - neovim
+    - coreutils
+    - fabianishere/personal/pam_reattach # it relies on the brew root being /usr/local
+    - tmux
+    - terminal-notifier # required by my sshuttle vpn agent
 
 - Missing brew installs: youtube-dl, wakeonlan, sshuttle
 - Missing cask installs: EnvPane, Steam, transmission-remote-gui, little-snitch
