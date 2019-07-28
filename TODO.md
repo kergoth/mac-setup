@@ -7,6 +7,8 @@
 - Add to casks
     - homebrew/cask-drivers/synology-drive
     - whatsapp
+    - kindle
+    - carbon-copy-cloner
 - Add to brew
     - parallel
     - sshuttle
