@@ -1,18 +1,14 @@
-# For cleanmymac2
-
 # Unsorted
 #brew 'ghc'
 #brew 'gpg-agent'
 #brew 'hardlink'
+#brew 'jdupes'
 #brew 'highlight'
 #brew 'homebrew/dupes/less'
 #brew 'keybase'
 #brew 'luajit'
 #brew 'picocom'
-#brew 'pyenv'
-#brew 'python'
 #brew 'tidyp'
-#brew 'tmux'
 #brew 'tofrodos'
 #brew 'wdiff'
 #brew 'xml2'

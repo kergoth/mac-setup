@@ -4,14 +4,12 @@
 tap 'kergoth/misc'
 
 # Essentials
-brew 'dtach'
 brew 'duti'
-brew 'dvtm-kergoth', args: ['HEAD']
 brew 'git'
-#brew 'mercurial'
 brew 'reattach-to-user-namespace'
 brew 'ssh-copy-id'
 brew 'tag'
-brew 'the_silver_searcher'
+brew 'terminal-notifier'
+brew 'tmux'
 brew 'trash'
 brew 'wget'

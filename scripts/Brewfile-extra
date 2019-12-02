@@ -8,9 +8,7 @@ brew 'rsync'
 brew 'jq'
 brew 'parallel'
 brew 'patchutils'
-brew 'pup'
 brew 'pv'
-brew 'terminal-notifier'
 
 # For youtube-dl
 brew 'ffmpeg'
@@ -19,8 +17,3 @@ brew 'rtmpdump'
 # Extras
 brew 'dfc'
 brew 'htop-osx'
-brew 'cabal-install'
-brew 'go'
-brew 'node'
-brew 'shellcheck'
-brew 'sshuttle'
