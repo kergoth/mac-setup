@@ -9,6 +9,8 @@ brew 'jq'
 brew 'parallel'
 brew 'patchutils'
 brew 'pv'
+# needed for node
+brew 'gnupg'
 
 # For youtube-dl
 brew 'ffmpeg'
