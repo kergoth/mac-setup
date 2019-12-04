@@ -11,6 +11,7 @@ brew 'patchutils'
 brew 'pv'
 # needed for node
 brew 'gnupg'
+brew 'neovim'
 
 # For youtube-dl
 brew 'ffmpeg'
