@@ -79,4 +79,7 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad HIDScrollZoomM
 # Kill Skype's splash screen
 defaults write com.skype.skype SKShowSplash NO
 
+# Improve bluetooth audio quality over a2dp
+defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" 40
+
 setup-apps
