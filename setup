@@ -1,28 +1,124 @@
-#!/bin/bash
-#
-# Prerequisite: run as an admin user, for sudo access
-#
-# Elements:
-# - Install CLT/Xcode
-# - Install homebrew
-# - Install homebrew formulas
-# - Install apps, with whatever extra steps are needed
-# - Set up & configure apps and associations
-# - Dropbox settings sync / symlinks
-#
-# TODO:
-# - [ ] defaults setup
-# - [ ] Figure out why the BlockBlock kext isn't working with El Capitan
+#!/bin/sh
 
+set -eu
 
-set -euo pipefail
+usage() {
+    echo >&2 "${0##*/} [options]"
+    exit 2
+}
 
-scriptdir="$(cd "$(dirname "$0")" && pwd -P)"
-PATH="$scriptdir/scripts:$PATH"
+die() {
+    die_msg="$1"
+    shift
+    # shellcheck disable=SC2059
+    printf >&2 "$die_msg\n" "$@"
+    exit 1
+}
 
-export HOMEBREW_PREFIX="${HOMEBREW_PREFIX:-/opt/homebrew}"
+run_su() {
+    su_user="$1"
+    shift
+    echo >&2 "Running '$*' as $su_user, input $su_user's password"
+    su - "$su_user" "$PWD/scripts/run" "$PWD" "$@"
+}
 
-setup-admin "$@"
-install-apps || :
-setup-user || :
-setup-user-extra
+run_user() {
+    if [ "$adminuser" != "$user" ]; then
+        set -- env HOMEBREW_CASK_OPTS="${HOMEBREW_CASK_OPTS:+} --appdir=~/Applications" HOMEBREW_PREFIX=~/.brew PATH="~/.brew/bin:$PATH" "$@"
+    fi
+
+    if [ "$am_user" -eq 1 ]; then
+        command "$@"
+    else
+        run_su "$user" "$@"
+    fi
+}
+
+run_admin() {
+    if [ "$am_adminuser" -eq 1 ]; then
+        command "$@"
+    else
+        run_su "$adminuser" "$@"
+    fi
+}
+
+am_user=0
+am_adminuser=0
+install_admin=1
+
+adminuser=
+user=
+singleuser=0
+while getopts a:u:sh opt; do
+    case "$opt" in
+        a)
+            adminuser="$OPTARG"
+            ;;
+        u)
+            user="$OPTARG"
+            ;;
+        s)
+            singleuser=1
+            ;;
+        \? | h)
+            usage
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+if [ "$singleuser" -eq 1 ]; then
+    if [ -n "$user" ]; then
+        die "Must not specify -u with -s"
+    fi
+    if [ -n "$adminuser" ]; then
+        die "Must not specify -a with -s"
+    fi
+    am_user=1
+    am_adminuser=1
+else
+    this_user="$(whoami)"
+    if groups | grep -qw admin; then
+        if [ -z "$adminuser" ]; then
+            adminuser="$this_user"
+            am_adminuser=1
+        fi
+        if [ -z "$user" ]; then
+            die "This user is an administrative user. Please specify a standard user with -u, or explicitly state that this is a single-admin-user configuration with -s."
+        fi
+    else
+        if [ -z "$user" ]; then
+            user="$this_user"
+            am_user=1
+        fi
+        if [ -z "$adminuser" ]; then
+            echo >&2 "Warning: This user is not an administrative user. Skipping installation of admin components. To install those, please specify an administrative user via the command-line with -a, or run this script as an administrative user."
+            install_admin=0
+        fi
+    fi
+fi
+
+cd "$(dirname "$0")"
+
+PATH="$PWD:$PWD/scripts:$PWD/extras:$PATH"
+export HOMEBREW_PREFIX=/opt/homebrew
+unset HOMEBREW_AUTO_UPDATE
+
+if [ "$install_admin" -eq 1 ]; then
+    run_admin ./scripts/setup-admin
+    run_admin ./scripts/install-apps "$@"
+fi
+
+if [ "$adminuser" != "$user" ]; then
+    if ! [ -e ~/.brew/bin/brew ]; then
+        run_user ./scripts/install-brew -s ~/.brew || :
+    fi
+    if ! [ -e ~/.brew/bin/brew ]; then
+        exit 1
+    fi
+fi
+run_user ./scripts/install-apps "$@"
+run_user brew install duti # Needed by setup-apps (via setup-user) to set up associations
+run_user ./scripts/setup-user
+run_user ./scripts/setup-user-extra
+run_user ./scripts/install-apps -d ./brews "$@"

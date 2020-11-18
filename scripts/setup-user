@@ -72,7 +72,7 @@ defaults write com.apple.dock showhidden -bool true
 defaults write com.apple.iTunes allow-half-stars -bool true
 
 # Disable scroll gesture with modifier keys to zoom
-defaults write com.apple.universalaccess closeViewScrollWheelToggle -int 0
+#defaults write com.apple.universalaccess closeViewScrollWheelToggle -int 0
 defaults write com.apple.AppleMultitouchTrackpad HIDScrollZoomModifierMask -int 0
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad HIDScrollZoomModifierMask -int 0
 

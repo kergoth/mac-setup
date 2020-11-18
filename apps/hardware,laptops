@@ -1,0 +1,2 @@
+cask 'coconutbattery'
+mas 'UnPlugged', id: 423123087 # or cask 'unplugged'

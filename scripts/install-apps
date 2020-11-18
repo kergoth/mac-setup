@@ -1,5 +1,33 @@
 #!/bin/sh
 
+set -eu
+
+usage() {
+    echo >&2 "${0##*/} [options] [CATEGORY..]"
+    exit 2
+}
+
+filter_unmatched() {
+    while read -r f; do
+        base="$(basename "${f%.sh}")"
+        unmatched=0
+        for required_category in $(echo "$base" | tr ',' ' '); do
+            if ! echo "$*" | grep -qwF "$required_category"; then
+                unmatched=1
+            fi
+        done
+        if [ "$unmatched" -eq 1 ]; then
+            if [ -n "$verbose" ]; then
+                echo >&2 "Skipping $f, unmatched categories"
+            fi
+            continue
+        else
+            echo "$f"
+        fi
+    done
+}
+
+## For use by .sh scripts
 locate_app () {
     mdfind "kMDItemContentType == 'com.apple.application-bundle' && kMDItemDisplayName == '${*%.app}'cd"
 }
@@ -12,22 +40,72 @@ app_installed () {
     test -n "$(locate_app_by_id "$*")"
 }
 
-# TODO: see if brew-bundle will automatically install mas for us
-#brew install mas
+verbose=
+app_dir=
+admin=
+while getopts vd:auh opt; do
+    case "$opt" in
+        v)
+            verbose=1
+            ;;
+        d)
+            app_dir="$OPTARG"
+            ;;
+        a)
+            admin=1
+            ;;
+        u)
+            admin=0
+            ;;
+        \? | h)
+            usage
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
 
 if [ $# -eq 0 ]; then
     set -- core
 fi
 
-scriptdir="$(cd "$(dirname "$0")" && pwd -P)"
-PATH="${HOMEBREW_PREFIX:-$(brew --prefix 2>/dev/null || echo /opt/homebrew)}/bin:$scriptdir:$PATH"
-
-# We want to do the rest of the setup even if the bundle setup partially fails,
-# so ignore any error from it at this time.
-for group; do
-    if [ -e scripts/install-apps-$group ]; then
-        scripts/install-apps-$group
-    else
-        brew bundle --verbose --file=scripts/Brewfile-$group || :
+if [ -z "$app_dir" ]; then
+    if [ -z "$admin" ]; then
+        if groups | grep -qw admin; then
+            admin=1
+        else
+            admin=0
+        fi
     fi
-done
+    if [ "$admin" -eq 1 ]; then
+        app_dir=adminapps
+    else
+        app_dir=apps
+    fi
+fi
+
+scriptdir="$(cd "$(dirname "$0")" && pwd -P)"
+PATH="$scriptdir:$scriptdir/scripts:$scriptdir/extras:$PATH"
+
+tmpfile="$(mktemp -t "${0##*/}.XXXXXX")" || exit 1
+trap 'rm -f "$tmpfile"' EXIT INT TERM
+
+find "$app_dir" -type f -not -iname \*.sh -not -name .DS_Store -not -name \*.lock.json \
+    | filter_unmatched "$@" \
+    | tr '\n' '\0' \
+    | xargs -t0 cat \
+    | while read -r line; do \
+        if echo "$line" | grep -q oversight; then
+            echo >&2 "Warning: when installing Oversight, you must quit the app to continue, as the installer hangs."
+        fi
+        echo "$line"
+    done \
+    | brew bundle ${verbose:+--verbose} --file=-
+
+find "$app_dir" -type f -iname \*.sh -not -name .DS_Store -not -name \*.lock.json \
+    | filter_unmatched "$@" \
+    | while read -r f; do
+        if [ -n "$verbose" ]; then
+            echo >&2 "Executing $f"
+        fi
+        sh "$f"
+    done

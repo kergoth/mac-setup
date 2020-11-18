@@ -12,9 +12,3 @@ defaults write com.apple.finder CreateDesktop -bool false
 
 # Disable Dashboard
 defaults write com.apple.dashboard mcx-disabled -bool true
-
-# Zsh is my preferred shell
-export HOMEBREW_PREFIX=/opt/homebrew
-if [ -e "$HOMEBREW_PREFIX/bin/zsh" ] && grep -qx "$HOMEBREW_PREFIX/bin/zsh" /etc/shells; then
-    chsh -s "$HOMEBREW_PREFIX/bin/zsh"
-fi

@@ -1,14 +1,8 @@
-# Prereqs
-
-# Taps
-tap 'kergoth/misc'
-
 # Essentials
 brew 'duti'
 brew 'git'
 brew 'reattach-to-user-namespace'
 brew 'ssh-copy-id'
-brew 'tag'
 brew 'terminal-notifier'
 brew 'tmux'
 brew 'trash'

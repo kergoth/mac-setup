@@ -38,9 +38,6 @@ sudo defaults write /Library/Preferences/com.apple.alf stealthenabled -bool true
 # Disable Bonjour multicast advertisements:
 sudo defaults write /Library/Preferences/com.apple.mDNSResponder.plist NoMulticastAdvertisements -bool YES
 
-# Avoid captive portal hijacking attacks
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.captive.control Active -bool false
-
 # Don't show hostname at the login screen
 sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo ""
 
@@ -52,14 +49,12 @@ sudo sh -c "echo kern.maxfilesperproc=1048576 >>/etc/sysctl.conf"
 sudo sh -c "sort -u /etc/sysctl.conf >/tmp/foo && mv /tmp/foo /etc/sysctl.conf"
 sudo sysctl -w $(cat /etc/sysctl.conf)
 
-# Sane permissions for /opt and /usr/local
+# Sane permissions for /opt
 sudo mkdir -p /opt
 sudo chmod g+wXs /opt
-sudo chmod g+wX /opt
-sudo chgrp -R admin /usr/local || :
 sudo chgrp -R admin /opt
-sudo find /usr/local -type d -exec chmod g+wXs "{}" \;
-sudo find /usr/local -not -type d -exec chmod g+wX "{}" \;
+sudo find /opt -type d -exec chmod g+wXs "{}" \;
+sudo find /opt -not -type d -exec chmod g+wX "{}" \;
 
 sudo sh -c 'cat >/usr/local/bin/java && chmod +x /usr/local/bin/java' <<END
 #!/bin/sh
@@ -68,7 +63,7 @@ exit 1
 END
 
 if ! xcode-select -p >/dev/null 2>&1; then
-    if [ $xcode -eq 1 ]; then
+    if [ "$xcode" -eq 1 ]; then
         install-xcode
     else
         install-clt

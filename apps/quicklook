@@ -1,0 +1,7 @@
+#cask 'qlcolorcode' # pulls in highlight, which needs boost, pkg-config, lua
+cask 'qlmarkdown'
+cask 'qlprettypatch'
+cask 'qlstephen'
+cask 'quicklook-csv'
+cask 'quicklook-json'
+cask 'webpquicklook'

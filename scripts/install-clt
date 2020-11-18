@@ -8,6 +8,6 @@ softwareupdate -l
 PROD=$(softwareupdate -l --no-scan |
        grep "\*.*Command Line" |
        awk -F"*" '{print $2}' | tail -n 1 |
-       sed -e 's/^ *//' |
+       sed -e 's/^ *//; s/Label: //' |
        tr -d '\n')
 softwareupdate -i "$PROD" --verbose

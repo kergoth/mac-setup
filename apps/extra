@@ -1,0 +1,9 @@
+cask 'calibre'
+cask 'omnioutliner'
+cask 'vivaldi'
+mas 'Bear', id: 1091189122
+mas 'GoodLinks', id: 1474335294
+mas 'Reeder 5.', id: 1529448980
+mas 'Spark', id: 1176895641
+mas 'Textual 7', id: 1262957439
+mas 'Todoist', id: 585829637

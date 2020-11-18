@@ -1,4 +1,3 @@
-#tap 'kergoth/kergoth-cask', 'file:///Users/kergoth/Downloads/kergoth-cask'
 #cask 'cleanmymac2'
 #cask 'filebot'
 #cask 'firefox'
@@ -10,6 +9,8 @@
 #cask 'gpgtools'
 #cask 'handbrake'
 #cask 'java' unless system '/usr/libexec/java_home --failfast'
+#cask 'kap'
+#cask 'kextviewr'
 #cask 'kindle'
 #cask 'macdown'
 #cask 'malwarebytes-anti-malware'
@@ -21,17 +22,19 @@
 #cask 'sitesucker'
 #cask 'soulver'
 #cask 'sublime-text'
+#cask 'swiftdefaultappsprefpane'
 #cask 'synology-assistant'
+#cask 'taskpaper'
 #cask 'torbrowser'
 #cask 'transmission'
 #cask 'transmission-remote-gui'
 #cask 'tunnelblick'
 #cask 'unpkg'
-#cask 'visual-studio-code'
-#cask 'vivaldi-snapshot'
-#cask 'vlc'
 #cask 'vox'
 #cask 'waltr'
-#cask 'whatsapp'
 #cask 'xld'
-#cask 'ynab'
+#mas 'AudioBookBinder', id: 413969927
+#mas 'Byword', id: 420212497
+#mas 'Day One Classic', id: 422304217
+#mas 'Marked 2', id: 890031187
+#mas 'Microsoft Remote Desktop', id: 1295203466

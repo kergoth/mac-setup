@@ -1,0 +1,6 @@
+cask '1password'
+cask 'blockblock'
+cask 'karabiner-elements'
+cask 'oversight'
+cask 'reikey'
+cask 'whatsyoursign'

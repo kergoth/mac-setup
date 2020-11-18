@@ -1,0 +1,3 @@
+cask 'dash' # mas 'Dash', id: 458034879
+cask 'slack'
+cask 'visual-studio-code'

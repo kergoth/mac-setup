@@ -7,7 +7,6 @@ brew 'gnu-sed'
 brew 'rsync'
 brew 'jq'
 brew 'parallel'
-brew 'patchutils'
 brew 'pv'
 # needed for node
 brew 'gnupg'
@@ -16,7 +15,3 @@ brew 'neovim'
 # For youtube-dl
 brew 'ffmpeg'
 brew 'rtmpdump'
-
-# Extras
-brew 'dfc'
-brew 'htop-osx'
