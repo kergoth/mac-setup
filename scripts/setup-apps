@@ -1,5 +1,9 @@
 #!/bin/sh
 
+locate_app () {
+    mdfind "kMDItemContentType == 'com.apple.application-bundle' && kMDItemDisplayName == '${*%.app}'cd"
+}
+
 locate_app_by_id () {
     mdfind -onlyin /Applications "kMDItemContentType == 'com.apple.application-bundle' && kMDItemCFBundleIdentifier == '$*'"
 }
