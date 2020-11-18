@@ -18,8 +18,6 @@
     - tmux
     - terminal-notifier # required by my sshuttle vpn agent
 
-- Missing brew installs: youtube-dl, wakeonlan, sshuttle
-- Missing cask installs: EnvPane, Steam, transmission-remote-gui, little-snitch
 - Set default for .torrent to transmission-remote-gui
 
 Updates:

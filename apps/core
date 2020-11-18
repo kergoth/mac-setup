@@ -1,4 +1,3 @@
-#cask 'fantastical1'
 cask 'alfred'
 cask 'appcleaner'
 cask 'bartender'
