@@ -8,6 +8,10 @@ PATH="${HOMEBREW_PREFIX:-$(brew --prefix 2>/dev/null || echo /usr/local)}/bin:$s
 tmpdir="$PWD/$(mktemp -d "${0##*/}.XXXXXX")"
 trap 'rm -rf "$tmpdir"' EXIT INT TERM
 
+if [ ! -e "${HOMEBREW_PREFIX:-$HOME/.brew}/bin/brew" ]; then
+    install-brew -s "${HOMEBREW_PREFIX:-$HOME/.brew}"
+fi
+
 # Apply spotlight privacy fixes
 /usr/bin/python $scriptdir/fix-macosx.py
 
