@@ -1,8 +1,27 @@
 #!/bin/sh
 
+default_categories=core
+export HOMEBREW_USER_PREFIX="~/.brew"
+export HOMEBREW_ADMIN_PREFIX="/opt/homebrew"
+
 set -eu
 
 usage() {
+    cat >&2 <<END
+${0##*/} [options] [CATEGORY..]
+
+Set up a macOS system the way I like it. Relies heavily on brew-bundle.
+If no CATEGORY is specified, defaults to $default_categories.
+HOMEBREW_ADMIN_PREFIX defaults to $HOMEBREW_ADMIN_PREFIX.
+HOMEBREW_USER_PREFIX defaults to $HOMEBREW_USER_PREFIX.
+
+Options:
+  -a ADMIN_USER    Specify the administrative user to use.
+  -u STANDARD_USER Specify the standard user to use.
+  -s               Single user mode, assume use of a single administrative user, no standard.
+  -A HOMEBREW_ADMIN_PREFIX  Specify the homebrew prefix for the administrative user.
+  -U HOMEBREW_USER_PREFIX   Specify the homebrew prefix for the standard user.
+END
     echo >&2 "${0##*/} [options]"
     exit 2
 }
@@ -15,47 +34,55 @@ die() {
     exit 1
 }
 
-run_su() {
-    su_user="$1"
+run_as_user() {
+    run_user="$1"
     shift
-    echo >&2 "Running '$*' as $su_user, input $su_user's password"
-    su - "$su_user" "$PWD/scripts/run" "$PWD" "$@"
+    run_prefix="$1"
+    shift
+
+    if [ "$run_user" = "$user" ]; then
+        set -- env HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_PREFIX="$run_prefix" HOMEBREW_CASK_OPTS="${HOMEBREW_CASK_OPTS:+} --appdir=~/Applications" "$PWD/scripts/run" "$PWD" "$@"
+    else
+        set -- env HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_PREFIX="$run_prefix" "$PWD/scripts/run" "$PWD" "$@"
+    fi
+
+    if [ "$this_user" = "$run_user" ]; then
+        echo >&2 "Running '$*'"
+        command "$@"
+    else
+        echo >&2 "Running '$*' as $run_user, input $run_user's password"
+        su - "$run_user" -c 'command "$@"' - "$@"
+    fi
 }
 
 run_user() {
-    if [ "$adminuser" != "$user" ]; then
-        set -- env HOMEBREW_CASK_OPTS="${HOMEBREW_CASK_OPTS:+} --appdir=~/Applications" HOMEBREW_PREFIX=~/.brew PATH="~/.brew/bin:$PATH" "$@"
-    fi
-
-    if [ "$am_user" -eq 1 ]; then
-        command "$@"
-    else
-        run_su "$user" "$@"
-    fi
+    run_as_user "$user" "$HOMEBREW_USER_PREFIX" "$@"
 }
 
 run_admin() {
-    if [ "$am_adminuser" -eq 1 ]; then
-        command "$@"
-    else
-        run_su "$adminuser" "$@"
-    fi
+    run_as_user "$adminuser" "$HOMEBREW_ADMIN_PREFIX" "$@"
 }
 
-am_user=0
-am_adminuser=0
-install_admin=1
-
+install_admin=0
+install_user=0
 adminuser=
 user=
 singleuser=0
-while getopts a:u:sh opt; do
+while getopts a:u:A:U:sh opt; do
     case "$opt" in
         a)
             adminuser="$OPTARG"
+            install_admin=1
             ;;
         u)
             user="$OPTARG"
+            install_user=1
+            ;;
+        A)
+            HOMEBREW_ADMIN_PREFIX="$OPTARG"
+            ;;
+        U)
+            HOMEBREW_USER_PREFIX="$OPTARG"
             ;;
         s)
             singleuser=1
@@ -67,6 +94,12 @@ while getopts a:u:sh opt; do
 done
 shift $((OPTIND - 1))
 
+if [ $# -eq 0 ]; then
+    # shellcheck disable=SC2248
+    set -- $default_categories
+fi
+
+this_user="$(whoami)"
 if [ "$singleuser" -eq 1 ]; then
     if [ -n "$user" ]; then
         die "Must not specify -u with -s"
@@ -74,51 +107,41 @@ if [ "$singleuser" -eq 1 ]; then
     if [ -n "$adminuser" ]; then
         die "Must not specify -a with -s"
     fi
-    am_user=1
-    am_adminuser=1
+    adminuser="$this_user"
+    user="$this_user"
+    HOMEBREW_USER_PREFIX="$HOMEBREW_ADMIN_PREFIX"
 else
-    this_user="$(whoami)"
-    if groups | grep -qw admin; then
-        if [ -z "$adminuser" ]; then
+    if [ -z "$adminuser" ] && [ -z "$user" ]; then
+        if groups | grep -qw admin; then
             adminuser="$this_user"
-            am_adminuser=1
-        fi
-        if [ -z "$user" ]; then
-            die "This user is an administrative user. Please specify a standard user with -u, or explicitly state that this is a single-admin-user configuration with -s."
-        fi
-    else
-        if [ -z "$user" ]; then
+            install_admin=1
+        else
             user="$this_user"
-            am_user=1
-        fi
-        if [ -z "$adminuser" ]; then
-            echo >&2 "Warning: This user is not an administrative user. Skipping installation of admin components. To install those, please specify an administrative user via the command-line with -a, or run this script as an administrative user."
-            install_admin=0
+            install_user=1
         fi
     fi
 fi
 
-cd "$(dirname "$0")"
-
-PATH="$PWD:$PWD/scripts:$PWD/extras:$PATH"
-export HOMEBREW_PREFIX=/opt/homebrew
-unset HOMEBREW_AUTO_UPDATE
+if [ "$install_user" -eq 1 ]; then
+    echo >&2 "Standard user: $user"
+else
+    echo >&2 "Skipping Standard component installation. To change this, specify -s for single user mode or specify the standard user with -u."
+fi
 
 if [ "$install_admin" -eq 1 ]; then
+    echo >&2 "Administrative user: $adminuser"
+    echo >&2 "Installing administrative components"
     run_admin ./scripts/setup-admin
-    run_admin ./scripts/install-apps "$@"
+    run_admin ./scripts/install-apps -a "$@"
+else
+    echo >&2 "Skipping Administrative component installation. To change this, specify -s for single user mode or specify the administrative user with -a."
 fi
 
-if [ "$adminuser" != "$user" ]; then
-    if ! [ -e ~/.brew/bin/brew ]; then
-        run_user ./scripts/install-brew -s ~/.brew || :
-    fi
-    if ! [ -e ~/.brew/bin/brew ]; then
-        exit 1
-    fi
+if [ "$install_user" -eq 1 ]; then
+    echo >&2 "Installing standard components"
+    run_user ./scripts/install-apps -u "$@"
+    run_user brew install duti # Needed by setup-apps (via setup-user) to set up associations
+    run_user ./scripts/setup-user
+    run_user ./scripts/setup-user-extra
+    run_user ./scripts/install-apps -u -d ./brews "$@"
 fi
-run_user ./scripts/install-apps "$@"
-run_user brew install duti # Needed by setup-apps (via setup-user) to set up associations
-run_user ./scripts/setup-user
-run_user ./scripts/setup-user-extra
-run_user ./scripts/install-apps -d ./brews "$@"
