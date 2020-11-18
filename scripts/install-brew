@@ -92,4 +92,4 @@ for dir in etc include lib opt sbin share var/homebrew/linked Cellar Frameworks;
 done
 
 brew update || exit 2
-brew doctor
+brew doctor || exit 0
