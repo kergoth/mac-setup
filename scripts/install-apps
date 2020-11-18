@@ -92,10 +92,10 @@ trap 'rm -f "$tmpfile"' EXIT INT TERM
 find "$app_dir" -type f -not -iname \*.sh -not -name .DS_Store -not -name \*.lock.json \
     | filter_unmatched "$@" \
     | tr '\n' '\0' \
-    | xargs -t0 cat \
+    | xargs -0 cat \
     | while read -r line; do \
         if echo "$line" | grep -q oversight; then
-            echo >&2 "Warning: when installing Oversight, you must quit the app to continue, as the installer hangs."
+            echo >&2 "WARNING: when installing Oversight, you must quit the app to continue, as the installer hangs."
         fi
         echo "$line"
     done \
