@@ -89,6 +89,10 @@ PATH="$scriptdir:$scriptdir/scripts:$scriptdir/extras:$PATH"
 tmpfile="$(mktemp -t "${0##*/}.XXXXXX")" || exit 1
 trap 'rm -f "$tmpfile"' EXIT INT TERM
 
+if [ -n "$HOMEBREW_PREFIX" ] && ! [ -e "$HOMEBREW_PREFIX/bin/brew" ]; then
+    "$(dirname "$0")/install-brew" -s "$HOMEBREW_PREFIX" || ( rm -rf "$HOMEBREW_PREFIX"; exit 1; )
+fi
+
 find "$app_dir" -type f -not -iname \*.sh -not -name .DS_Store -not -name \*.lock.json \
     | filter_unmatched "$@" \
     | tr '\n' '\0' \
