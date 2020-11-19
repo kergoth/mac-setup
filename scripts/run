@@ -11,10 +11,6 @@ shift
 if [ -n "$HOMEBREW_PREFIX" ]; then
     HOMEBREW_PREFIX="$(echo "$HOMEBREW_PREFIX" | sed -e "s#~#$HOME#")"
     PATH="$HOMEBREW_PREFIX/bin:$PATH"
-
-    if ! [ -e "$HOMEBREW_PREFIX"/bin/brew ]; then
-        "$(dirname "$0")/install-brew" -s "$HOMEBREW_PREFIX" || ( rm -rf "$HOMEBREW_PREFIX"; exit 1; )
-    fi
 fi
 
 cd "$dir" || exit 1
