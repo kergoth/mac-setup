@@ -1,17 +1,17 @@
+
+# For youtube-dl
+# needed for node
+# rsync 3.x rather than the old 2.x
 # Script dependencies
 brew 'coreutils'
+brew 'ffmpeg'
 brew 'findutils'
 brew 'gawk'
 brew 'gnu-sed'
-# rsync 3.x rather than the old 2.x
-brew 'rsync'
+brew 'gnupg'
 brew 'jq'
+brew 'neovim'
 brew 'parallel'
 brew 'pv'
-# needed for node
-brew 'gnupg'
-brew 'neovim'
-
-# For youtube-dl
-brew 'ffmpeg'
+brew 'rsync'
 brew 'rtmpdump'
