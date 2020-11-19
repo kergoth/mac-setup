@@ -21,6 +21,7 @@ Options:
   -s               Single user mode, assume use of a single administrative user, no standard.
   -A HOMEBREW_ADMIN_PREFIX  Specify the homebrew prefix for the administrative user.
   -U HOMEBREW_USER_PREFIX   Specify the homebrew prefix for the standard user.
+  -i INSTALL_APPS_ARGS      Specify arguments to pass to ./scripts/install-apps.
 END
     echo >&2 "${0##*/} [options]"
     exit 2
@@ -68,7 +69,8 @@ install_user=0
 adminuser=
 user=
 singleuser=0
-while getopts a:u:A:U:sh opt; do
+install_apps_args=
+while getopts a:u:A:U:si:h opt; do
     case "$opt" in
         a)
             adminuser="$OPTARG"
@@ -86,6 +88,9 @@ while getopts a:u:A:U:sh opt; do
             ;;
         s)
             singleuser=1
+            ;;
+        i)
+            install_apps_args="$OPTARG"
             ;;
         \? | h)
             usage
@@ -132,14 +137,16 @@ if [ "$install_admin" -eq 1 ]; then
     echo >&2 "Administrative user: $adminuser"
     echo >&2 "Installing administrative components"
     run_admin ./scripts/setup-admin
-    run_admin ./scripts/install-apps -a "$@"
+    # shellcheck disable=SC2086
+    eval run_admin ./scripts/install-apps "$install_apps_args" -a "$@"
 else
     echo >&2 "Skipping Administrative component installation. To change this, specify -s for single user mode or specify the administrative user with -a."
 fi
 
 if [ "$install_user" -eq 1 ]; then
     echo >&2 "Installing standard components"
-    run_user ./scripts/install-apps -u "$@"
+    # shellcheck disable=SC2086
+    eval run_user ./scripts/install-apps "$install_apps_args" -u "$@"
     run_user brew install duti # Needed by setup-apps (via setup-user) to set up associations
     run_user ./scripts/setup-user
     run_user ./scripts/setup-user-extra
