@@ -1,5 +1,4 @@
 cask 'daisydisk'
 cask 'keepingyouawake'
-cask 'the-unarchiver'
 mas 'Deliveries', id: 290986013
 mas 'LilyView', id: 529490330

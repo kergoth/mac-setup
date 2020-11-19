@@ -6,6 +6,7 @@ cask 'carbon-copy-cloner'
 cask 'iterm2'
 cask 'path-finder'
 cask 'syncthing'
+cask 'the-unarchiver'
 cask 'vlc'
 mas 'Magnet', id: 441258766
 mas 'PopClip', id: 445189367
