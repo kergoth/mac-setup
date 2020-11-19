@@ -69,7 +69,3 @@ if ! xcode-select -p >/dev/null 2>&1; then
         install-clt
     fi
 fi
-
-if [ ! -e "${HOMEBREW_PREFIX:-/opt/homebrew}/bin/brew" ]; then
-    install-brew-system "${HOMEBREW_PREFIX:-/opt/homebrew}"
-fi
