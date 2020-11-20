@@ -147,7 +147,7 @@ if [ "$install_user" -eq 1 ]; then
     echo >&2 "Installing standard components"
     # shellcheck disable=SC2086
     eval run_user ./scripts/install-apps "$install_apps_args" -u "$@"
-    run_user brew install duti # Needed by setup-apps (via setup-user) to set up associations
+    run_user brew install duti jq   # Needed by setup-apps (via setup-user) to set up associations
     run_user ./scripts/setup-user
     run_user ./scripts/setup-user-extra
     run_user ./scripts/install-apps -u -d ./brews "$@"
