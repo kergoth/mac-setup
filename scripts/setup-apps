@@ -12,8 +12,17 @@ app_installed () {
     test -n "$(locate_app_by_id "$*")"
 }
 
+app_installed_directly () {
+    for dir in /Applications ~/Applications /Applications/Utility ~/Applications/Utility; do
+        if [ -d "$dir/$1.app" ]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
 duti_all () {
-    if app_installed "$1"; then
+    if app_installed_directly "$1"; then
         duti-all "$1"
     fi
 }
@@ -24,27 +33,13 @@ ext_to_uti () {
 
 
 duti -vs com.googlecode.iterm2 public.unix-executable shell
-duti -vs com.softwareambience.lilyview public.image viewer
-duti -vs com.softwareambience.lilyview com.adobe.photoshop-image viewer
-# duti -vs org.mozilla.firefox public.html all
-# duti -vs org.mozilla.firefox public.xhtml all
-# duti -vs org.mozilla.firefox com.apple.web-internet-location all
-# duti -vs org.mozilla.firefox http
-# duti -vs org.mozilla.firefox https
-# duti -vs org.mozilla.firefox ftp
-duti -vs org.videolan.vlc com.apple.quicktime-movie viewer
-duti -vs org.videolan.vlc public.3gpp viewer
-duti -vs org.videolan.vlc public.3gpp2 viewer
-duti -vs org.videolan.vlc public.avi viewer
-duti -vs org.videolan.vlc public.dv-movie viewer
-duti -vs org.videolan.vlc public.flc-animation viewer
-duti -vs org.videolan.vlc public.mpeg viewer
-duti -vs org.videolan.vlc public.mpeg-4 viewer
-if app_installed com.cocoatech.PathFinder; then
+if app_installed_directly "Path Finder"; then
     duti -vs com.cocoatech.PathFinder public.folder viewer
 fi
-duti -vs com.amazon.SendToKindle .mobi viewer
-duti -vs com.amazon.SendToKindle .azw viewer
+if app_installed_directly "Send to Kindle"; then
+    duti -vs com.amazon.SendToKindle .mobi viewer
+    duti -vs com.amazon.SendToKindle .azw viewer
+fi
 
 # Switch these associations from Archive Utility to The Unarchiver
 duti-all -n "/System/Library/CoreServices/Applications/Archive Utility.app" | \
