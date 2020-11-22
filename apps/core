@@ -1,6 +1,5 @@
 cask 'alfred'
 cask 'appcleaner'
-cask 'bartender'
 cask 'captin'
 cask 'carbon-copy-cloner'
 cask 'iterm2'
@@ -8,5 +7,6 @@ cask 'path-finder'
 cask 'syncthing'
 cask 'the-unarchiver'
 cask 'vlc'
+mas 'Hidden Bar', id: 1452453066
 mas 'Magnet', id: 441258766
 mas 'PopClip', id: 445189367
