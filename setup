@@ -19,6 +19,7 @@ Options:
   -a ADMIN_USER    Specify the administrative user to use.
   -u STANDARD_USER Specify the standard user to use.
   -s               Single user mode, assume use of a single administrative user, no standard.
+  -S               Run the setup-user script even if we're only installing administrative components.
   -A HOMEBREW_ADMIN_PREFIX  Specify the homebrew prefix for the administrative user.
   -U HOMEBREW_USER_PREFIX   Specify the homebrew prefix for the standard user.
   -i INSTALL_APPS_ARGS      Specify arguments to pass to ./scripts/install-apps. Default: -v
@@ -64,13 +65,28 @@ run_admin() {
     run_as_user "$adminuser" "$HOMEBREW_ADMIN_PREFIX" "$@"
 }
 
+setup_user() {
+    echo >&2 "Setting up the user"
+    if [ -n "$HOMEBREW_USER_PREFIX" ] && ! [ -e "$HOMEBREW_USER_PREFIX/bin/brew" ]; then
+        # shellcheck disable=SC2086
+        eval '"$(dirname "$0")"/install-brew -s -t "core bundle cask"' '"$HOMEBREW_USER_PREFIX"' || (
+            rm -rf "$HOMEBREW_USER_PREFIX"
+            exit 1
+        )
+    fi
+    run_user brew install duti jq # Needed by setup-apps (via setup-user) to set up associations
+    run_user ./scripts/setup-user
+    run_user ./scripts/setup-user-extra
+}
+
 install_admin=0
 install_user=0
 adminuser=
 user=
+setup_user=0
 singleuser=0
 install_apps_args=-v
-while getopts a:u:A:U:si:h opt; do
+while getopts a:u:SA:U:si:h opt; do
     case "$opt" in
         a)
             adminuser="$OPTARG"
@@ -79,6 +95,9 @@ while getopts a:u:A:U:si:h opt; do
         u)
             user="$OPTARG"
             install_user=1
+            ;;
+        S)
+            setup_user=1
             ;;
         A)
             HOMEBREW_ADMIN_PREFIX="$OPTARG"
@@ -139,6 +158,9 @@ if [ "$install_admin" -eq 1 ]; then
     run_admin ./scripts/setup-admin
     # shellcheck disable=SC2086
     eval run_admin ./scripts/install-apps "$install_apps_args" -a "$@"
+    if [ "$install_user" -eq 0 ] && [ "$setup_user" -eq 1 ]; then
+        setup_user
+    fi
 else
     echo >&2 "Skipping Administrative component installation. To change this, specify -s for single user mode or specify the administrative user with -a."
 fi
@@ -147,8 +169,8 @@ if [ "$install_user" -eq 1 ]; then
     echo >&2 "Installing standard components"
     # shellcheck disable=SC2086
     eval run_user ./scripts/install-apps "$install_apps_args" -u "$@"
-    run_user brew install duti jq   # Needed by setup-apps (via setup-user) to set up associations
-    run_user ./scripts/setup-user
-    run_user ./scripts/setup-user-extra
+    run_user brew install duti jq # Needed by setup-apps (via setup-user) to set up associations
+    setup_user
+    echo >&2 "Installing homebrew formulas"
     run_user ./scripts/install-apps -u -d ./brews "$@"
 fi
