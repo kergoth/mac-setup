@@ -21,7 +21,7 @@ Options:
   -s               Single user mode, assume use of a single administrative user, no standard.
   -A HOMEBREW_ADMIN_PREFIX  Specify the homebrew prefix for the administrative user.
   -U HOMEBREW_USER_PREFIX   Specify the homebrew prefix for the standard user.
-  -i INSTALL_APPS_ARGS      Specify arguments to pass to ./scripts/install-apps.
+  -i INSTALL_APPS_ARGS      Specify arguments to pass to ./scripts/install-apps. Default: -v
 END
     echo >&2 "${0##*/} [options]"
     exit 2
@@ -69,7 +69,7 @@ install_user=0
 adminuser=
 user=
 singleuser=0
-install_apps_args=
+install_apps_args=-v
 while getopts a:u:A:U:si:h opt; do
     case "$opt" in
         a)
