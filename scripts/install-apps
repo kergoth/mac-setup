@@ -3,6 +3,17 @@
 set -eu
 
 usage() {
+    cat >&2 <<END
+${0##*/} [options] [CATEGORY..]
+
+Options:
+
+ -v                    Verbose mode.
+ -i INSTALL_BREW_ARGS  Arguments to pass along to the install-brew script.
+ -d APP_DIR            The directory which holds the "apps" to install, that is, homebrew Brewfiles.
+ -a                    Specify that we are running as an admin user, explicitly.
+ -u                    Specify that we are running as an non-admin user, explicitly.
+END
     echo >&2 "${0##*/} [options] [CATEGORY..]"
     exit 2
 }
@@ -97,7 +108,7 @@ if [ -n "$HOMEBREW_PREFIX" ] && ! [ -e "$HOMEBREW_PREFIX/bin/brew" ]; then
     # shellcheck disable=SC2086
     eval '"$(dirname "$0")"/install-brew -s -t "core bundle cask"' "$install_brew_args" '"$HOMEBREW_PREFIX"' || ( rm -rf "$HOMEBREW_PREFIX"; exit 1; )
 fi
-    
+
 find "$app_dir" -type f -not -iname \*.sh -not -name .DS_Store -not -name \*.lock.json \
     | filter_unmatched "$@" \
     | tr '\n' '\0' \
