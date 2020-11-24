@@ -1,0 +1,13 @@
+#!/bin/sh
+# The OverSight installer runs OverSight in the foreground, so avoid it.
+
+set -e
+
+tmpdir="$(mktemp -d -t "${0##*/}.XXXXXX")" || exit 1
+trap 'rm -rf "$tmpdir"' EXIT INT TERM
+cd "$tmpdir"
+
+curl -fSL -o OverSight.zip https://bitbucket.org/objective-see/deploy/downloads/OverSight_1.2.0.zip
+unzip OverSight.zip
+ditto OverSight_Installer.app/Contents/Resources/OverSight.app /Applications/OverSight.app
+open -g /Applications/OverSight.app/Contents/Library/LoginItems/OverSight\ Helper.app
