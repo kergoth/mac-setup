@@ -67,12 +67,11 @@ run_admin() {
 
 setup_user() {
     echo >&2 "Setting up the user"
-    if [ -n "$HOMEBREW_USER_PREFIX" ] && ! [ -e "$HOMEBREW_USER_PREFIX/bin/brew" ]; then
-        # shellcheck disable=SC2086
-        eval '"$(dirname "$0")"/install-brew -s -t "core bundle cask"' '"$HOMEBREW_USER_PREFIX"' || (
-            rm -rf "$HOMEBREW_USER_PREFIX"
-            exit 1
-        )
+    if [ -z "$user" ]; then
+        user="$this_user"
+    fi
+    if ! [ -e "$(echo "$HOMEBREW_USER_PREFIX" | sed -e "s#~#$HOME#")/bin/brew" ]; then
+        run_user ./scripts/install-brew -s
     fi
     run_user brew install duti jq # Needed by setup-apps (via setup-user) to set up associations
     run_user ./scripts/setup-user
@@ -169,7 +168,6 @@ if [ "$install_user" -eq 1 ]; then
     echo >&2 "Installing standard components"
     # shellcheck disable=SC2086
     eval run_user ./scripts/install-apps "$install_apps_args" -u "$@"
-    run_user brew install duti jq # Needed by setup-apps (via setup-user) to set up associations
     setup_user
     echo >&2 "Installing homebrew formulas"
     run_user ./scripts/install-apps -u -d ./brews "$@"
