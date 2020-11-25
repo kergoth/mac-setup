@@ -3,13 +3,11 @@
 set -euo pipefail
 
 scriptdir="$(cd "$(dirname "$0")" && pwd -P)"
-PATH="${HOMEBREW_PREFIX:-$(brew --prefix 2>/dev/null || echo /usr/local)}/bin:$scriptdir:$PATH"
+HOMEBREW_PREFIX="${HOMEBREW_PREFIX:-$HOME/.brew}"
+PATH="$HOMEBREW_PREFIX/bin:$scriptdir:$PATH"
 
-tmpdir="$PWD/$(mktemp -d "${0##*/}.XXXXXX")"
-trap 'rm -rf "$tmpdir"' EXIT INT TERM
-
-if [ ! -e "${HOMEBREW_PREFIX:-$HOME/.brew}/bin/brew" ]; then
-    install-brew -s "${HOMEBREW_PREFIX:-$HOME/.brew}"
+if [ ! -e "$HOMEBREW_PREFIX/bin/brew" ]; then
+    install-brew -s "$HOMEBREW_PREFIX"
 fi
 
 # Apply spotlight privacy fixes
@@ -76,12 +74,8 @@ defaults write com.apple.dock showhidden -bool true
 defaults write com.apple.iTunes allow-half-stars -bool true
 
 # Disable scroll gesture with modifier keys to zoom
-#defaults write com.apple.universalaccess closeViewScrollWheelToggle -int 0
 defaults write com.apple.AppleMultitouchTrackpad HIDScrollZoomModifierMask -int 0
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad HIDScrollZoomModifierMask -int 0
-
-# Kill Skype's splash screen
-defaults write com.skype.skype SKShowSplash NO
 
 # Improve bluetooth audio quality over a2dp
 defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" 40

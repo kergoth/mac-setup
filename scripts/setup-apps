@@ -1,38 +1,63 @@
 #!/bin/sh
 
-locate_app () {
+locate_app() {
     mdfind "kMDItemContentType == 'com.apple.application-bundle' && kMDItemDisplayName == '${*%.app}'cd"
 }
 
-locate_app_by_id () {
+locate_app_by_id() {
     mdfind -onlyin /Applications "kMDItemContentType == 'com.apple.application-bundle' && kMDItemCFBundleIdentifier == '$*'"
 }
 
-app_installed () {
+app_installed() {
     test -n "$(locate_app_by_id "$*")"
 }
 
-app_installed_directly () {
+app_path() {
     for dir in /Applications ~/Applications /Applications/Utility ~/Applications/Utility; do
         if [ -d "$dir/$1.app" ]; then
+            echo "$dir/$1.app"
             return 0
         fi
     done
     return 1
 }
 
-duti_all () {
+app_installed_directly() {
+    app_path "$1" >/dev/null
+}
+
+duti_all() {
     if app_installed_directly "$1"; then
         duti-all "$1"
     fi
 }
 
-ext_to_uti () {
+ext_to_uti() {
     duti -e "$*" | sed -ne 's/^identifier: //p'
 }
 
+add_login() {
+    osascript -e "tell application \"System Events\" to make login item at end with properties {path:\"$1\", hidden:false}"
+}
 
-duti -vs com.googlecode.iterm2 public.unix-executable shell
+# Use Alfred. FIXME: alter the alfred shortcut?
+# Change Spotlight keyboard shortcut from cmd-space to option-space
+# defaults write com.apple.symbolichotkeys.plist AppleSymbolicHotKeys -dict-add 64 "
+#   <dict>
+#     <key>enabled</key><false/>
+#     <key>value</key><dict>
+#       <key>type</key><string>standard</string>
+#       <key>parameters</key>
+#       <array>
+#         <integer>32</integer>
+#         <integer>49</integer>
+#         <integer>524288</integer>
+#       </array>
+#     </dict>
+#   </dict>
+# "
+
+# duti -vs com.googlecode.iterm2 public.unix-executable shell
 if app_installed_directly "Path Finder"; then
     duti -vs com.cocoatech.PathFinder public.folder viewer
 fi
@@ -42,39 +67,61 @@ if app_installed_directly "Send to Kindle"; then
 fi
 
 # Switch these associations from Archive Utility to The Unarchiver
-duti-all -n "/System/Library/CoreServices/Applications/Archive Utility.app" | \
-    sed 's/com\.apple\.archiveutility/cx\.c3\.theunarchiver/; s/-s/-vs/;' | \
-    tr '\n' '\0' | xargs -0 -n 1 -I"{}" sh -c "{}"
+duti-all -n "/System/Library/CoreServices/Applications/Archive Utility.app" \
+    | sed 's/com\.apple\.archiveutility/cx\.c3\.theunarchiver/; s/-s/-vs/;' \
+    | tr '\n' '\0' | xargs -0 -n 1 -I"{}" sh -c "{}"
+
+# FIXME: add VLC associations
+# TODO: PopClip, Paste and Hidden Bar needed me to check a box to enable start at login, the others did not.
+if app_installed_directly Paste; then
+    add_login ~/Library/Application\ Support/Paste\ Helper/Paste\ Helper.app
+fi
 
 # Open these apps so they set up auto-start for themselves
-while read -r bundle_id; do
-    if app_installed "$bundle_id"; then
-        open -gb "$bundle_id"
+while read -r app; do
+    if app_installed_directly "$app"; then
+        open -ga "$app"
     fi
 done <<END
-ch.tripmode.TripMode
-com.agilebits.onepassword4
-com.backup42.desktop
-com.bjango.istatmenus
-com.expandrive.ExpanDrive3
-com.flexibits.fantastical
-com.getdropbox.dropbox
-com.pilotmoon.popclip
-com.runningwithcrayons.Alfred-3
-com.surteesstudios.Bartender
-org.herf.Flux
-com.wulkano.kap
-com.100hps.captin
-com.crowdcafe.windowmagnet
-com.briksoftware.unplugged
-net.freemacsoft.AppCleaner
-com.wiheads.paste
-com.docker.docker
-com.aptonic.Dropzone3
+1Password 7
+Alfred 4
+Hidden Bar
+Karabiner-Elements
+Magnet
+OverSight
+ReiKey
 END
 
-if test -n "$(locate_app "WiFi Signal")"; then
-    open -ga "WiFi Signal" 2>/dev/null
+while read -r app; do
+    app_file_path="$(app_path "$app")"
+    if [ $? -eq 0 ]; then
+        add_login "$app_file_path"
+        open -ga "$app"
+    fi
+done <<END
+BlockBlock Helper
+coconutBattery
+PopClip
+Syncthing
+UnPlugged
+WiFi Signal
+END
+
+appcleaner="$(app_path "AppCleaner")"
+if [ $? -eq 0 ]; then
+    open -g "$appcleaner/Contents/Library/LoginItems/AppCleaner SmartDelete.app"
+fi
+
+ccc="$(app_path "Carbon Copy Cloner")"
+if [ $? -eq 0 ]; then
+    open -g "$ccc/Contents/Library/LoginItems/CCC User Agent.app"
+fi
+
+oversight="$(app_path "OverSight")"
+if [ $? -eq 0 ]; then
+    add_login "$oversight/Contents/Library/LoginItems/OverSight Helper.app"
+    mkdir -p ~/Library/Application\ Support/Objective-See/OverSight
+    touch ~/Library/Application\ Support/Objective-See/OverSight/OverSight.log
 fi
 
 # Reload the Quick Look generators list
