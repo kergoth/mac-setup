@@ -1,6 +1,5 @@
 cask 'alfred'
 cask 'appcleaner'
-cask 'captin'
 cask 'carbon-copy-cloner'
 cask 'iterm2'
 cask 'path-finder'
