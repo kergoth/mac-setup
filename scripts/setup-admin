@@ -62,6 +62,8 @@ sudo sh -c 'cat >/usr/local/bin/java && chmod +x /usr/local/bin/java' <<END
 exit 1
 END
 
+sudo dscl . create "$HOME" IsHidden 1
+
 if ! xcode-select -p >/dev/null 2>&1; then
     if [ "$xcode" -eq 1 ]; then
         install-xcode
