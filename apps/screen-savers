@@ -1,2 +1,2 @@
-aerial
-brooklyn
+cask 'aerial'
+cask 'brooklyn'
