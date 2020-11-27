@@ -63,6 +63,7 @@ exit 1
 END
 
 sudo dscl . create "$HOME" IsHidden 1
+sudo fdesetup remove -user "$USER"
 
 if ! xcode-select -p >/dev/null 2>&1; then
     if [ "$xcode" -eq 1 ]; then
