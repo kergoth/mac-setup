@@ -56,6 +56,9 @@ sudo chgrp -R admin /opt
 sudo find /opt -type d -exec chmod g+wXs "{}" \;
 sudo find /opt -not -type d -exec chmod g+wX "{}" \;
 
+# Add /usr/local/bin to the default PATH
+sudo launchctl config user path /usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
+
 sudo sh -c 'cat >/usr/local/bin/java && chmod +x /usr/local/bin/java' <<END
 #!/bin/sh
 # Stub to kill the java jdk dialog popup
