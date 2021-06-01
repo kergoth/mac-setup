@@ -1,3 +1,6 @@
+# Taps
+tap 'kergoth/misc'
+
 # Essentials
 brew 'duti'
 brew 'git'
