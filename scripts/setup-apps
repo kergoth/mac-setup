@@ -114,7 +114,7 @@ fi
 
 ccc="$(app_path "Carbon Copy Cloner")"
 if [ $? -eq 0 ]; then
-    open -g "$ccc/Contents/Library/LoginItems/CCC User Agent.app"
+    open -g "$ccc/Contents/Library/LoginItems/CCC Dashboard.app"
 fi
 
 oversight="$(app_path "OverSight")"
