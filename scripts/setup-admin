@@ -49,16 +49,6 @@ sudo sh -c "echo kern.maxfilesperproc=1048576 >>/etc/sysctl.conf"
 sudo sh -c "sort -u /etc/sysctl.conf >/tmp/foo && mv /tmp/foo /etc/sysctl.conf"
 sudo sysctl -w $(cat /etc/sysctl.conf)
 
-# Sane permissions for /opt
-sudo mkdir -p /opt
-sudo chmod g+wXs /opt
-sudo chgrp -R admin /opt
-sudo find /opt -type d -exec chmod g+wXs "{}" \;
-sudo find /opt -not -type d -exec chmod g+wX "{}" \;
-
-# Add /usr/local/bin to the default PATH
-sudo launchctl config user path /usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
-
 sudo dscl . create "$HOME" IsHidden 1
 sudo fdesetup remove -user "$USER" || :
 
